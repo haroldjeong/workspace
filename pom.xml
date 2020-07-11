@@ -5,11 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>go.gg.safety</groupId>
-    <artifactId>egovframe-parent</artifactId>
+    <artifactId>parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <!-- Children Modules -->
+    <description>경기도 IoT기반 스마트글라스 활용 원격 안전점검시스템 구축 프로젝트</description>
+    <url>http://www.deepfine.ai</url>
+
+    <!--
+        ## 하위 모듈 구성
+        # common : 공통모듈
+        # web : 도민청구 웹사이트 사용자 사이트 모듈
+        # cms : 통합 관리자 사이트(CMS) 모듈
+    -->
     <modules>
         <module>cms</module>
         <module>web</module>
@@ -26,6 +34,27 @@
     <properties>
         <spring.maven.artifact.version>4.3.22.RELEASE</spring.maven.artifact.version>
         <egovframework.rte.version>3.9.0</egovframework.rte.version>
+
+        <!--↓↓↓↓↓↓↓ 필요 Property 추가 (반드시 추가자 명시!!!) Start ↓↓↓↓↓↓↓-->
+
+        <!-- Java 버전 공통관리 (jm.lee) -->
+        <java.version>1.8</java.version>
+
+        <!-- 기본 Encoding CharacterSet 공통관리 (jm.lee) -->
+        <default.encoding>UTF-8</default.encoding>
+
+        <!-- 하위모듈 버전 공통관리 (jm.lee) -->
+        <module.version.common>1.0.0-SNAPSHOT</module.version.common>
+        <module.version.cms>1.0.0-SNAPSHOT</module.version.cms>
+        <module.version.web>1.0.0-SNAPSHOT</module.version.web>
+
+        <!-- Nexus Repository URL 공통관리 (jm.lee) -->
+        <!-- todo: 넥서스 세팅 완료 후, Repository URL 등록 예정 (jm.lee) -->
+        <nexus.url.releases>http://127.0.0.1</nexus.url.releases>
+        <nexus.url.snapshot>http://127.0.0.1</nexus.url.snapshot>
+        <nexus.url.3rdParty>http://127.0.0.1</nexus.url.3rdParty>
+
+        <!--↑↑↑↑↑↑↑ 필요 Property 추가 (반드시 추가자 명시!!!) End ↑↑↑↑↑↑↑-->
     </properties>
 
     <repositories>
@@ -60,6 +89,23 @@
             </snapshots>
         </repository>
     </repositories>
+
+
+    <!--
+        ## 별도 관리용 의존성 정보는 아래 추가 (실제 라이브러리가 추가되는 것은 아님)
+        ↓↓↓↓↓↓↓ 필요 Dependency Management 추가 (반드시 추가자 명시!!!) Start ↓↓↓↓↓↓↓
+    -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- 프로젝트 공통 모듈 (jm.lee) -->
+            <dependency>
+                <groupId>go.gg.safety</groupId>
+                <artifactId>common</artifactId>
+                <version>${module.version.common}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <!--↑↑↑↑↑↑↑ 필요 Dependency Management 추가 (반드시 추가자 명시!!!) End ↑↑↑↑↑↑↑-->
 
     <dependencies>
         <!-- 표준프레임워크 실행환경 -->
@@ -154,6 +200,29 @@
             <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ojdbc-14.jar</systemPath>
         </dependency>
         -->
+
+
+        <!--↓↓↓↓↓↓↓ 필요 Library 추가 (반드시 추가자 명시!!!) Start ↓↓↓↓↓↓↓-->
+
+
+        <!-- XSS: Naver Lucy (jm.lee) -->
+        <dependency>
+            <groupId>com.navercorp.lucy</groupId>
+            <artifactId>lucy-xss-servlet</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
+        <!-- todo: lombok 추가 예정 (jm.lee) -->
+        <!-- todo: 로깅 라이브러리 추가 예정 (log4j 사용예정) (jm.lee) -->
+        <!-- todo: JSON 파싱 라이브러리 추가 예정 (gson 사용 예정) (jm.lee) -->
+        <!-- todo: 보안 관련 인증토큰 라이브러리 추가 예정 (JWT 사용 예정) (jm.lee) -->
+        <!-- todo: 데이터 캐싱 관련 라이브러리 추가 예정 (ehcache or redis 둘 중 하나 사용 예정) (jm.lee) -->
+
+        <!-- todo: 시리얼라이징, 마샬/언마샬 별도 라이브러리로 쓸 필요가 있을지 확인 필요. 요건/기능분석 후 내부적으로 논의해서 결정만 하면 될 듯 (jm.lee) -->
+        <!-- todo: oAuth 사용할지 확인해야 함 (현업과 논의할지 또는 내부적으로 사용/배제할지 결정 필요. 사용 시 oAuth2.0 추가 및 JWT 연동 필요. 사용한다 해도 아마 사용자만 추가하면 될 듯) (jm.lee) -->
+        <!-- todo: 메일서버 확인 필요 (별도 서버/서비스 보유 or 자체 SMTP 사용. SMTP 사용 시, 방화벽과 사용할 메일도메인의 화이트리스트 체크해야 함) (jm.lee) -->
+
+        <!--↑↑↑↑↑↑↑ 필요 Library 추가 (반드시 추가자 명시!!!) End ↑↑↑↑↑↑↑-->
     </dependencies>
 
     <build>
@@ -178,9 +247,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                        <encoding>UTF-8</encoding>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>${default.encoding}</encoding>
                     </configuration>
                 </plugin>
 
