@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
+
+	<description>Common Code functions library</description>
+	<display-name>Common Code functions</display-name>
+	<tlib-version>1.1</tlib-version>
+	<short-name>code</short-name>
+	<uri>tld/code.tld</uri>
+
+	<function>
+		<description>Find Code by Id</description>
+		<name>findById</name>
+		<function-class>go.gg.web.core.util.DeepfineCodeUtils</function-class>
+		<function-signature>java.lang.String findById(java.lang.String, java.lang.String)</function-signature>
+		<example>
+			${code:findById(codeSet, 'code-id')}
+		</example>
+	</function>
+
+	<function>
+		<description>Find Code Group by Path</description>
+		<name>findListByPathCd</name>
+		<function-class>go.gg.web.core.util.DeepfineCodeUtils</function-class>
+		<function-signature>java.lang.String findListByPathCd(java.lang.String, java.lang.String)</function-signature>
+		<example>
+			${code:findListByPathCd(codeSet, 'ROOT.country')}
+		</example>
+	</function>
+</taglib>

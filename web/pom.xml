@@ -23,16 +23,13 @@
             <artifactId>common</artifactId>
         </dependency>
 
-        <!-- 모바일/태블릿 디바이스 식별을 위한 Spring Mobile Library 추가. 식별 Class: currentDevice (jm.lee) -->
-        <!-- todo: DeviceResolverHandlerInterceptor 추가해야 함 (jm.lee) -->
-        <!--
+        <!-- Spring 데이터 가공 및 정렬 : Spring Data -->
         <dependency>
-            <groupId>org.springframework.mobile</groupId>
-            <artifactId>spring-mobile-device</artifactId>
-            <version>1.1.5.RELEASE</version>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <version>1.13.15.RELEASE</version>
         </dependency>
-        -->
-        <!--↑↑↑↑↑↑↑ 필요 Library 추가 (반드시 추가자 명시!!!) End ↑↑↑↑↑↑↑-->
 
+        <!--↑↑↑↑↑↑↑ 필요 Library 추가 (반드시 추가자 명시!!!) End ↑↑↑↑↑↑↑-->
     </dependencies>
 </project>

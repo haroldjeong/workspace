@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+	code-mapper.xml
+	@author jm.lee (DEEP.FINE)
+-->
+<mapper namespace="go.gg.web.core.commonCode">
+
+	<!-- 공통코드 전체목록 조회 -->
+	<select id="findCodeCache" parameterType="CommonCode" resultType="CommonCode">
+		/* SQL_ID : go.gg.web.core.commonCode.findCodeCache */
+		<![CDATA[
+		WITH RECURSIVE CODE_LIST (id, disp_cd, parent_id, disp_seq, custom_field_1, custom_field_2, custom_field_3, use_yn, depth, path_id, path_cd, path_seq, cycle) AS
+			(
+				SELECT a.id::TEXT
+					  , a.disp_cd::TEXT
+					  , a.parent_id::TEXT
+					  , a.disp_seq
+					  , a.custom_field_1
+					  , a.custom_field_2
+					  , a.custom_field_3
+					  , a.use_yn
+					  , 1 AS depth
+					  , ARRAY[a.id::TEXT]
+					  , ARRAY[a.disp_cd::TEXT]
+					  , ARRAY[a.disp_seq::TEXT]
+					  , false
+					  , false
+					  , false
+				  FROM tb_code a
+				 WHERE a.disp_cd = 'ROOT'
+				   AND a.parent_id IS NULL
+				UNION ALL
+				SELECT a.id::TEXT
+					  , a.disp_cd::TEXT
+					  , a.parent_id::TEXT
+					  , a.disp_seq
+					  , a.custom_field_1
+					  , a.custom_field_2
+					  , a.custom_field_3
+					  , a.use_yn
+					  , b.depth + 1
+					  , ARRAY_APPEND(b.path_id, a.id::TEXT)
+					  , ARRAY_APPEND(b.path_cd, a.disp_cd::TEXT)
+					  , ARRAY_APPEND(b.path_seq, a.disp_seq::TEXT)
+					  , a.id::TEXT = ANY(b.path_id)
+					  , a.disp_cd::TEXT = ANY(b.path_cd)
+					  , a.disp_seq::TEXT = ANY(b.path_seq)
+				  FROM tb_code AS a, CODE_LIST AS b
+				 WHERE a.parent_id::TEXT = b.id
+				   AND a.del_yn = 'N'
+				   AND a.use_yn = 'Y'
+				   AND NOT CYCLE
+			)
+			SELECT cd.id
+				  , cd.disp_cd AS cd
+				  , cd.parent_id
+				  , ml.name
+				  , ml.short_desc AS shrt_desc
+				  , ml.long_desc AS long_desc
+				  , cd.disp_seq AS seq
+				  , cd.use_yn
+				  , cd.depth
+				  , cd.custom_field_1
+				  , cd.custom_field_2
+				  , cd.custom_field_3
+				  , REPLACE(cd.path_id::TEXT, ',', '.') AS path_id
+				  , REPLACE(cd.path_cd::TEXT, ',', '.') AS path_cd
+				  , cd.path_seq
+				  , (SELECT COUNT(id) FROM tb_code a WHERE a.del_yn = 'N' AND cd.id = a.parent_id::TEXT) AS child_cnt
+			  FROM CODE_LIST AS cd
+			  LEFT OUTER JOIN tb_code_ml AS ml
+				ON cd.id = ml.parent_id::TEXT
+			 WHERE ((cd.disp_cd = 'ROOT' AND cd.parent_id IS NULL AND cd.depth = 1) OR ml.lang_cd = 'ko')
+			 ORDER BY path_seq
+		]]>
+	</select>
+</mapper>

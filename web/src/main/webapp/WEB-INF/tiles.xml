@@ -1,0 +1,45 @@
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+	<!-- Layout: 메인 -->
+	<definition name="layout-main" template="/WEB-INF/jsp/layout/main.jsp">
+		<put-attribute name="main-header" value="/WEB-INF/jsp/include/view/main/header.jsp" />
+		<put-attribute name="main-css" value="/WEB-INF/jsp/include/css/main-css.jsp" />
+		<put-attribute name="main-gnb" value="/WEB-INF/jsp/include/view/default/gnb.jsp" />
+		<put-attribute name="main-body" value="" />
+		<put-attribute name="main-js" value="/WEB-INF/jsp/include/js/main-js.jsp" />
+		<put-attribute name="main-footer" value="/WEB-INF/jsp/include/view/main/footer.jsp" />
+	</definition>
+
+	<definition name="*.tiles.main" extends="layout-main">
+		<put-attribute name="main-body" value="/WEB-INF/jsp/view/main/{1}.jsp"/>
+	</definition>
+
+
+	<!-- Layout: 기본 -->
+	<definition name="layout-default" template="/WEB-INF/jsp/layout/default.jsp">
+		<put-attribute name="default-header" value="/WEB-INF/jsp/include/view/default/header.jsp" />
+		<put-attribute name="default-navigator" value="/WEB-INF/jsp/include/view/default/navigator.jsp" />
+		<put-attribute name="default-css" value="/WEB-INF/jsp/include/css/default-css.jsp" />
+		<put-attribute name="default-gnb" value="/WEB-INF/jsp/include/view/default/gnb.jsp" />
+		<put-attribute name="default-body" value="" />
+		<put-attribute name="default-pre-js" value="/WEB-INF/jsp/include/js/default-pre-js.jsp" />
+		<put-attribute name="default-js" value="/WEB-INF/jsp/include/js/default-js.jsp" />
+		<put-attribute name="default-footer" value="/WEB-INF/jsp/include/view/default/footer.jsp" />
+	</definition>
+
+	<definition name="*.tiles.default" extends="layout-default">
+		<put-attribute name="default-body" value="/WEB-INF/jsp/view/{1}.jsp"/>
+	</definition>
+
+	<definition name="*/*.tiles.default" extends="layout-default">
+		<put-attribute name="default-body" value="/WEB-INF/jsp/view/{1}/{2}.jsp"/>
+	</definition>
+
+	<definition name="*/*/*.tiles.default" extends="layout-default">
+		<put-attribute name="default-body" value="/WEB-INF/jsp/view/{1}/{2}/{3}.jsp"/>
+	</definition>
+
+
+</tiles-definitions>

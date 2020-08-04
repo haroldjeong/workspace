@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+	sample-mapper.xml
+	@author jm.lee (DEEP.FINE)
+
+	// Guide
+	[jdbcType]
+		BIT
+		FLOAT
+		CHAR
+		TIMESTAMP
+		OTHER
+		UNDEFINED
+		TINYINT
+		REAL
+		VARCHAR
+		BINARY
+		BLOB
+		NVARCHAR
+		SMALLINT
+		DOUBLE
+		LONGVARCHAR
+		VARBINARY
+		CLOB
+		NCHAR
+		INTEGER
+		NUMERIC
+		DATE
+		LONGVARBINARY
+		BOOLEAN
+		NCLOB
+		BIGINT
+		DECIMAL
+		TIME
+		NULL
+		CURSOR
+-->
+<mapper namespace="go.gg.web.apps.sample">
+	<!-- 공통 검색조건 -->
+	<sql id="commonWhere">
+		<choose>
+			<when test="langCd != null and langCd != ''">
+				AND	sample_ml.lang_cd = #{langCd}
+			</when>
+			<otherwise>
+				AND	sample_ml.lang_cd = 'ko'
+			</otherwise>
+		</choose>
+
+		<if test="searchKeyword != null and searchKeyword != ''">
+			<choose>
+				<when test="searchCondition == 'name'">
+					AND	sample_ml.name like '%' || #{searchKeyword} || '%'
+				</when>
+				<when test="searchCondition == 'long_desc'">
+					AND	sample_ml.long_desc like '%' || #{searchKeyword} || '%'
+				</when>
+			</choose>
+		</if>
+
+		<if test="searchCategory != null and searchCategory != ''">
+			AND sample.category_cd = #{searchCategory}::uuid
+		</if>
+	</sql>
+
+	<!-- 공통 정렬조건 -->
+	<sql id="commonOrder">
+		<if test="sort == null">
+			ORDER BY sample.reg_date DESC
+		</if>
+		<if test="sort != null">
+			<foreach item="item" index="index" collection="sort" open="ORDER BY " separator=", " close=" ">
+				${item.property} ${item.direction}
+			</foreach>
+		</if>
+	</sql>
+
+	<!-- 목록 조회 -->
+	<select id="findList" parameterType="Sample" resultType="Sample">
+		/* SQL_ID : go.gg.web.apps.sample.findList */
+		<![CDATA[
+			SELECT
+				sample.id AS id
+				, sample.category_cd AS category_cd
+				, sample.file_id AS file_id
+				, sample.disp_seq AS disp_seq
+				, sample.reg_id AS reg_id
+				, sample.reg_ip AS reg_ip
+				, sample.reg_date AS reg_date
+				, sample.reg_agent AS reg_agent
+				, sample.mod_id AS mod_id
+				, sample.mod_ip AS mod_ip
+				, sample.mod_date AS mod_date
+				, sample.mod_agent AS mod_agent
+				, sample.test_date AS test_date
+				, sample_ml.name AS name
+				, sample_ml.short_desc AS short_desc
+				, sample_ml.long_desc AS long_desc
+			FROM tb_sample sample
+			INNER JOIN tb_sample_ml sample_ml
+			ON sample.id = sample_ml.parent_id
+			WHERE
+				sample.del_yn = 'N'
+		]]>
+		<include refid="commonWhere"/>
+		<include refid="commonOrder"/>
+		, sample.disp_seq ASC
+		OFFSET (#{pageIndex} - 1) * #{pageUnit} LIMIT #{pageUnit}
+	</select>
+
+	<!-- 목록 건수 조회 -->
+	<select id="countList" parameterType="Sample" resultType="int">
+		/* SQL_ID : go.gg.web.apps.sample.countList */
+		<![CDATA[
+			SELECT COUNT(sample.id) AS cnt
+			FROM tb_sample sample
+			INNER JOIN tb_sample_ml sample_ml
+			ON sample.id = sample_ml.parent_id
+			WHERE
+				sample.del_yn = 'N'
+		]]>
+		<include refid="commonWhere"/>
+	</select>
+
+	<!-- 상세 조회 -->
+	<select id="findDetail" parameterType="Sample" resultType="Sample">
+		/* SQL_ID : go.gg.web.apps.sample.findDetail */
+		<![CDATA[
+			SELECT
+				sample.id AS id
+				, sample.category_cd AS category_cd
+				, sample.file_id AS file_id
+				, sample.disp_seq AS disp_seq
+				, sample.reg_id AS reg_id
+				, sample.reg_ip AS reg_ip
+				, sample.reg_date AS reg_date
+				, sample.reg_agent AS reg_agent
+				, sample.mod_id AS mod_id
+				, sample.mod_ip AS mod_ip
+				, sample.mod_date AS mod_date
+				, sample.mod_agent AS mod_agent
+				, sample.test_date AS test_date
+				, sample_ml.name AS name
+				, sample_ml.short_desc AS short_desc
+				, sample_ml.long_desc AS long_desc
+			FROM tb_sample sample
+			INNER JOIN tb_sample_ml sample_ml
+			ON sample.id = sample_ml.parent_id
+			WHERE
+				sample.id = #{id}::uuid
+				AND sample.del_yn = 'N'
+		]]>
+	</select>
+
+	<!-- 정보 입력 (마스터) -->
+	<insert id="insertMaster" parameterType="Sample">
+		/* SQL_ID : go.gg.web.apps.sample.insertMaster */
+		<![CDATA[
+		INSERT INTO tb_sample (
+			id
+			, category_cd
+			, file_id
+			, disp_seq
+			, del_yn
+			, reg_id
+			, reg_ip
+			, reg_date
+			, reg_agent
+		) VALUES (
+			#{id}::uuid
+			, #{categoryCd}::uuid
+			, #{fileId}::uuid
+			, #{dispSeq, jdbcType=INTEGER}
+			, 'N'
+			, '5ecf786a-954d-4868-b9f1-250e1747c9bb'::uuid
+			, '127.0.0.1'
+			, now()
+			, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'
+		)
+		]]>
+	</insert>
+
+	<!-- 정보 입력 (다국어) -->
+	<insert id="insertMl" parameterType="Sample">
+		/* SQL_ID : go.gg.web.apps.sample.insertMl */
+		<![CDATA[
+		INSERT INTO tb_sample_ml (
+			id
+			, parent_id
+			, lang_cd
+			, name
+			, short_desc
+			, long_desc
+		) VALUES (
+			uuid_generate_v4()
+			, #{id}::uuid
+			, 'ko'
+			, #{name}
+			, #{shortDesc}
+			, #{longDesc}
+		)
+		]]>
+	</insert>
+
+	<!-- 정보 수정 (마스터) -->
+	<update id="updateMaster" parameterType="Sample">
+		/* SQL_ID : go.gg.web.apps.sample.updateMaster */
+		<![CDATA[
+		UPDATE tb_sample SET
+			category_cd = #{categoryCd}::uuid
+			, file_id = #{fileId}::uuid
+			, mod_id = '5ecf786a-954d-4868-b9f1-250e1747c9bb'::uuid
+			, mod_ip = '127.0.0.1'
+			, mod_date = now()
+			, mod_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'
+		WHERE
+			id = #{id}::uuid
+		]]>
+	</update>
+
+	<!-- 정보 수정 (다국어) -->
+	<update id="updateMl" parameterType="Sample">
+		/* SQL_ID : go.gg.web.apps.sample.updateMl */
+		<![CDATA[
+		UPDATE tb_sample_ml SET
+			name = #{name}
+			, short_desc = #{shortDesc}
+			, long_desc = #{longDesc}
+		WHERE
+			parent_id = #{id}::uuid
+		]]>
+	</update>
+
+	<!-- 정보 삭제 -->
+	<update id="delete" parameterType="Sample">
+		/* SQL_ID : go.gg.web.apps.sample.deleteMaster */
+		<![CDATA[
+		UPDATE tb_sample SET
+			del_yn = 'Y'
+			, mod_id = '5ecf786a-954d-4868-b9f1-250e1747c9bb'::uuid
+			, mod_ip = '127.0.0.1'
+			, mod_date = now()
+			, mod_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'
+		WHERE
+			id = #{id}::uuid
+		]]>
+	</update>
+
+</mapper>

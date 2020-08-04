@@ -103,6 +103,20 @@
                 <artifactId>common</artifactId>
                 <version>${module.version.common}</version>
             </dependency>
+
+            <!-- DB Connection Pool : Apache Commons DBCP2 (jm.lee) -->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-dbcp2</artifactId>
+                <version>2.7.0</version>
+            </dependency>
+
+            <!-- JDBC : PostgreSQL (jm.lee) -->
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>42.2.14</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <!--↑↑↑↑↑↑↑ 필요 Dependency Management 추가 (반드시 추가자 명시!!!) End ↑↑↑↑↑↑↑-->
@@ -204,6 +218,17 @@
 
         <!--↓↓↓↓↓↓↓ 필요 Library 추가 (반드시 추가자 명시!!!) Start ↓↓↓↓↓↓↓-->
 
+        <!-- DB Connection Pool : Apache Commons DBCP2 (jm.lee) -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+        </dependency>
+
+        <!-- JDBC : PostgreSQL (jm.lee) -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
 
         <!-- XSS: Naver Lucy (jm.lee) -->
         <dependency>
@@ -212,9 +237,43 @@
             <version>2.0.1</version>
         </dependency>
 
+        <!-- JSON Serializer : Jackson ObjectMapper (jm.lee) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.11.1</version>
+        </dependency>
+
+        <!-- JSON Parser : Jackson Data Binder (jm.lee) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.11.1</version>
+        </dependency>
+
+        <!-- Local Cache : EHCache (jm.lee) -->
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.10.6</version>
+        </dependency>
+
+        <!-- Local Cache : Spring Caching Interface (jm.lee) -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>4.3.20.RELEASE</version>
+        </dependency>
+
+        <!-- Local Cache : EHCache Support 모듈, 다른 Caching 지원모듈 (jm.lee) -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>4.3.20.RELEASE</version>
+        </dependency>
+
         <!-- todo: lombok 추가 예정 (jm.lee) -->
-        <!-- todo: 로깅 라이브러리 추가 예정 (log4j 사용예정) (jm.lee) -->
-        <!-- todo: JSON 파싱 라이브러리 추가 예정 (gson 사용 예정) (jm.lee) -->
+        <!-- todo: JSON 파싱 라이브러리 추가 예정 (Jackson 사용 예정) (jm.lee) -->
         <!-- todo: 보안 관련 인증토큰 라이브러리 추가 예정 (JWT 사용 예정) (jm.lee) -->
         <!-- todo: 데이터 캐싱 관련 라이브러리 추가 예정 (ehcache or redis 둘 중 하나 사용 예정) (jm.lee) -->
 

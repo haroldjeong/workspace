@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+	user-mapper.xml
+	@author jm.lee (DEEP.FINE)
+-->
+<mapper namespace="go.gg.web.apps.user">
+	<!-- 공통 검색조건 -->
+	<sql id="commonWhere">
+		<if test="searchKeyword != null and searchKeyword != ''">
+			<choose>
+				<when test="searchCondition == 0">
+					AND	ID LIKE '%' || #{searchKeyword} || '%'
+				</when>
+				<when test="searchCondition == 1">
+					AND	NAME LIKE '%' || #{searchKeyword} || '%'
+				</when>
+			</choose>
+		</if>
+	</sql>
+
+	<!-- 공통 정렬조건 -->
+	<sql id="commonOrder">
+		<if test="sort == null">
+			ORDER BY 1 DESC
+		</if>
+		<if test="sort != null">
+			<foreach item="item" index="index" collection="sort" open="ORDER BY " separator=", " close=" ">
+				${item.property} ${item.direction}
+			</foreach>
+		</if>
+	</sql>
+
+	<select id="findInit" parameterType="go.gg.cms.domain.User" resultType="go.gg.cms.domain.User">
+		/* SQL_ID : go.gg.cms.apps.user.findInit */
+		select 'a' as id
+		<where>
+			1=1
+			<include refid="commonWhere"/>
+		</where>
+		ORDER BY ID ASC
+		LIMIT #{recordCountPerPage} OFFSET 1
+	</select>
+
+	<select id="countInit" parameterType="go.gg.cms.domain.User" resultType="int">
+		/* SQL_ID : go.gg.cms.apps.user.countInit */
+		select count('a') as totcnt
+		<where>
+			1=1
+			<include refid="commonWhere"/>
+		</where>
+	</select>
+</mapper>
