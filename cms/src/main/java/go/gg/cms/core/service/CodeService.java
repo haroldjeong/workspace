@@ -18,7 +18,7 @@ import java.util.Map;
  * @since 2020.07.16
  * @version 1.0.0
  */
-@Service("apps.code.service")
+@Service("core.code.service")
 public class CodeService extends EgovAbstractMapper {
 
 	/**

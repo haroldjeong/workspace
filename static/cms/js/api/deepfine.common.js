@@ -359,6 +359,7 @@ $(document).ready(function() {
 					}
 				},
 				save: function(item, confirmMsg, isValidation) {
+
 					$.core.loading.start();
 
 					try {
@@ -382,13 +383,12 @@ $(document).ready(function() {
 						// console.log(JSON.stringify(preProcessedResult));
 						// console.log("flow.bind.action.save.end");
 						if (!confirmMsg || confirm(confirmMsg)) {
-
 							$.core.ajax.post({
 								dataType: dataType,
 								contentType: 'application/json',
 								url: uri,
 								data: JSON.stringify(preProcessedResult),
-								success: function (result) {
+								success: function(result) {
 									var postProcessedResult = result;
 
 									if (typeof flow.bind.action.success === "function" ||
