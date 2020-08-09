@@ -8,3 +8,4 @@
 <%@ taglib prefix="fn"			uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="javatime"	uri="http://sargue.net/jsptags/time"%>
 <%@ taglib prefix="code"		uri="tld/code.tld"%>
+<%@ taglib prefix="user"		uri="tld/user.tld"%>

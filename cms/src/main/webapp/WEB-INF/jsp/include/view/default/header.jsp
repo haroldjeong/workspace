@@ -57,7 +57,7 @@
 			</ul>
 		</li>
 		<li>
-			<a href="<c:url value="/"/>">
+			<a href="#" class="_flow-action-logout">
 				<i class="fa fa-sign-out"></i> Log out
 			</a>
 		</li>

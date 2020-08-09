@@ -1,12 +1,11 @@
 package go.gg.cms.core.domain;
 
-import com.google.common.collect.Sets;
+import go.gg.common.domain.Base;
 import go.gg.common.util.DeepfineUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  * CMS 기본 도메인 (추상 클래스)
@@ -16,13 +15,9 @@ import java.util.Set;
  * @since 2020.07.16
  * @version 1.0.0
  */
-public abstract class CmsBase implements Serializable, Cloneable {
+public abstract class CmsBase extends Base implements Serializable, Cloneable {
+
 	private static final long serialVersionUID = 3462771383890862656L;
-
-
-	// todo: 로그인 유저(CMS 관리자) 기본정보 공통 도메인 추가 예정 (jm.lee)
-	// @JsonIgnore
-	// private User user = UserUtils.getUserInfo();     // 로그인 유저(CMS) 기본정보
 
 	private Code langCd;
 	private Code channelCd;
@@ -84,4 +79,5 @@ public abstract class CmsBase implements Serializable, Cloneable {
 	public void initId() {
 		this.id = DeepfineUtils.generateUUID();
 	}
+
 }

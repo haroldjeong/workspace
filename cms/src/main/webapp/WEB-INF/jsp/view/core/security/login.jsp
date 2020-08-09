@@ -33,15 +33,17 @@
 		</div>
 		<div class="col-md-6">
 			<div class="ibox-content">
-				<form class="m-t" role="form" action="index.html">
+				<form class="m-t" role="form" method="post" action="login-proc.do">
 					<div class="form-group">
-						<input type="text" class="form-control" name="loginId" id="loginId" placeholder="로그인 아이디" required="">
+						<input type="text" class="form-control" name="loginId" placeholder="로그인 아이디" autocomplete="off" maxlength="20" required="required" value="jm.lee" />
 					</div>
 					<div class="form-group">
-						<input type="password" class="form-control" name="loginPw" id="loginPw" placeholder="비밀번호" required="">
+						<input type="password" class="form-control" name="loginPw" placeholder="비밀번호" autocomplete="off" maxlength="20" required="required" value="1234" />
 					</div>
+					<small class="text-danger font-bold"><c:out value="${message}"/></small>
 					<br/><br/><br/><br/><br/>
 					<button type="submit" class="btn btn-primary block full-width m-b">Login</button>
+					<img src="/static/img/onepass/btn_onepass_blueline_72.png" class="full-width m-b" />
 
 					<%--<a href="#">--%>
 						<%--<small>Forgot password?</small>--%>

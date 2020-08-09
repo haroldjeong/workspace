@@ -21,5 +21,14 @@
 			checkboxClass: 'icheckbox_square-green',
 			radioClass: 'iradio_square-green',
 		});
+
+		$("._flow-action-logout").each(function(i, item) {
+			$(item).off("click").on("click", function () {
+				if (confirm("로그아웃하시겠습니까?")) {
+					$("form[name='frmHidden']").prop("action", "<c:url value="/logout.do"/>").submit();
+				}
+			});
+		});
 	});
 </script>
+<form name="frmHidden" method="post" action=""></form>

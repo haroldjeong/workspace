@@ -4,10 +4,9 @@ import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import go.gg.cms.apps.user.service.UserService;
 import go.gg.cms.core.controller.BaseController;
 import go.gg.common.util.DeepfineUtils;
-import go.gg.cms.domain.User;
+import go.gg.cms.core.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +35,6 @@ public class UserController extends BaseController {
 	 */
 	@RequestMapping("list.do")
 	public String list(@ModelAttribute("condition") User condition, Model model) {
-		System.out.println("[SOUT] UserController ::: list.do ::::");
 		logger.debug("[LOGGER.DEBUG] UserController ::: list.do ::::");
 
 		PaginationInfo paginationInfo = new PaginationInfo();

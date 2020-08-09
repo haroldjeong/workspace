@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import go.gg.cms.domain.User;
-
 /**
  * Spring Security 관련 도메인 Override
  * @apiNote org.springframework.security.core.userdetails.User 상속받아야 함
@@ -24,13 +22,12 @@ public class SecurityUserDetail extends org.springframework.security.core.userde
 
 	public SecurityUserDetail (User user) {
 		super(user.getLoginId()
-				, user.getLoginPw()
+				, ""
 				, true
 				, true
 				, true
 				, true
-				, null);
-				//, makeGrantedAuthority(user.getRoles()));
+				, makeGrantedAuthority(user.getRoles()));
 				// todo: 임시로 권한 하드코딩 (null). 추후 권한체계 구현 시 반드시 수정 필요 (jm.lee)
 		this.user = user;
 
@@ -56,11 +53,11 @@ public class SecurityUserDetail extends org.springframework.security.core.userde
 	}
 
 	/**
-	 * 차단 여부 검사 와 동일 하게 설정 : 임시 잠금에 대한 기능은 없음
+	 * 계정 잠금: 관리자에서 잠금 설정 또는 비밀번호 실패 5회 이상
 	 */
 	@Override
 	public boolean isAccountNonLocked() {
-		return "Y".equals(user.getUseYn());
+		return !"BLOCKED".equals(user.getStatus()) || user.getLoginFail() >= 5;
 	}
 
 	/**
@@ -75,17 +72,20 @@ public class SecurityUserDetail extends org.springframework.security.core.userde
 	}
 
 	/**
-	 * 차단 여부 검사
+	 * 계정 탈퇴: 관리자에서 탈퇴 처리
 	 */
 	@Override
 	public boolean isEnabled() {
-		return !"N".equals(user.getUseYn()) && user.getLoginFail() < 5;
+		return !"WITHDRAWN".equals(user.getStatus());
 	}
 
-	private static List<GrantedAuthority> makeGrantedAuthority (List<String> roles) {
+	/**
+	 * 사용자 권한 조회
+	 */
+	private static List<GrantedAuthority> makeGrantedAuthority (List<UserRole> roles) {
 		List<GrantedAuthority> list = new ArrayList<>();
 		// todo: 임시로 권한 하드코딩 (MASTER). 추후 권한체계 구현 시 반드시 수정 필요 (jm.lee)
-		roles.forEach(role -> list.add(new SimpleGrantedAuthority(ROLE_PREFIX + "MASTER")));
+		roles.forEach(role -> list.add(new SimpleGrantedAuthority(ROLE_PREFIX + "MANAGER")));
 		return list;
 	}
 

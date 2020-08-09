@@ -18,14 +18,14 @@
 				<div class="dropdown profile-element">
 					<img alt="image" class="rounded-circle" src="/static/img/profile_small.jpg"/>
 					<a data-toggle="dropdown" class="dropdown-toggle" href="#">
-						<span class="block m-t-xs font-bold">이정민<small>&nbsp;선임연구원</small></span>
-						<span class="text-muted text-xs block">주식회사 딥파인<b class="caret"></b></span>
+						<span class="block m-t-xs font-bold"><c:out value="${user:getUserInfo().getName()}"/><small>&nbsp;선임연구원</small></span>
+						<span class="text-muted text-xs block"><c:out value="${user:getUserInfo().getGroupName()}"/><b class="caret"></b></span>
 					</a>
 					<ul class="dropdown-menu animated fadeInRight m-t-xs">
 						<li><a class="dropdown-item" href="<c:url value="/"/>">프로필 수정</a></li>
 						<li><a class="dropdown-item" href="<c:url value="/"/>">내 QR코드 보기</a></li>
 						<li class="dropdown-divider"></li>
-						<li><a class="dropdown-item" href="<c:url value="/"/>">Log out</a></li>
+						<li><a class="dropdown-item _flow-action-logout" href="#">Log out</a></li>
 					</ul>
 				</div>
 				<div class="logo-element">

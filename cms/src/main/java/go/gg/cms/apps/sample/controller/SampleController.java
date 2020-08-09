@@ -3,6 +3,7 @@ package go.gg.cms.apps.sample.controller;
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import go.gg.cms.apps.sample.service.SampleService;
 import go.gg.cms.core.controller.BaseController;
+import go.gg.cms.core.util.UserUtils;
 import go.gg.common.util.DeepfineUtils;
 import go.gg.cms.domain.Sample;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ public class SampleController extends BaseController {
 
 		model.addAttribute("resultList", resultList);
 		model.addAttribute("paginationInfo", paginationInfo);
+
+		System.out.println("UserUtils.getUserInfo().getEmail():::"+UserUtils.getUserInfo().getEmail());
 
 		return VIEW_PATH + "/list.tiles.default";
 	}

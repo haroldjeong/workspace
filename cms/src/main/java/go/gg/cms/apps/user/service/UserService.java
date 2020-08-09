@@ -1,7 +1,7 @@
 package go.gg.cms.apps.user.service;
 
 import go.gg.cms.core.service.BaseService;
-import go.gg.cms.domain.User;
+import go.gg.cms.core.domain.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

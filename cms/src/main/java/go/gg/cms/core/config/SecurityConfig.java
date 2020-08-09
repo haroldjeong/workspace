@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	/* Security 제외 패턴 */
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("/static/**", "/upload/**", "/error");
+		web.ignoring().antMatchers("/favicon.ico", "/static/**", "/upload/**", "/error");
 	}
 
 	@Override
@@ -50,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				.formLogin()
 					.loginPage("/login.do").permitAll()
+					.loginProcessingUrl("/login-proc.do")
 					.usernameParameter("loginId")
 					.passwordParameter("loginPw")
 					.successHandler(cmsLoginSuccessHandler())
@@ -63,15 +64,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.exceptionHandling().accessDeniedHandler(accessDeniedHandler())
 				.and()
 				// todo: 로그인 처리 구현 필요. (jm.lee)
-				.authorizeRequests()
-					.antMatchers()
-					.permitAll()
-					.anyRequest()
-					.anonymous()
 //				.authorizeRequests()
-//					.antMatchers("/login*", "/login/*", "/logout*").permitAll()
-//					.anyRequest().authenticated()
-//					.anyRequest().hasRole("MANAGER")
+//					.antMatchers().permitAll()
+//					.anyRequest().anonymous()
+				.authorizeRequests()
+					.antMatchers("/login*", "/login/*", "/logout*").permitAll()
+					.anyRequest().authenticated()
+//					.anyRequest().hasRole("ROLE_MANAGER")
 				.and()
 				.csrf().disable()
 					//.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
@@ -107,16 +106,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authenticationProvider());
 	}
+
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authProvider = new SecurityAuthProvider();
 		authProvider.setUserDetailsService(securityUserDetailsService);
-		authProvider.setPasswordEncoder(passwordEncoder());
+		// authProvider.setPasswordEncoder(passwordEncoder());
 		return authProvider;
 	}
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-
 		return new BCryptPasswordEncoder();
 	}
 

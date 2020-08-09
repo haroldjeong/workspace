@@ -6,7 +6,7 @@ import go.gg.cms.core.domain.SecurityUserDetail;
 import go.gg.cms.core.service.SecurityUserService;
 import go.gg.cms.core.util.ClientUtils;
 import go.gg.common.util.DeepfineUtils;
-import go.gg.cms.domain.User;
+import go.gg.cms.core.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -35,7 +35,7 @@ import java.util.stream.IntStream;
  */
 public class CmsLoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
 
-	final static Logger logger = LoggerFactory.getLogger(CmsLoginSuccessHandler.class);
+	private final static Logger logger = LoggerFactory.getLogger(CmsLoginSuccessHandler.class);
 
 	private SecurityUserService securityUserService;
 
@@ -50,7 +50,9 @@ public class CmsLoginSuccessHandler extends SavedRequestAwareAuthenticationSucce
 		, HttpServletResponse response
 		, Authentication authentication) throws ServletException, IOException {
 
-		SecurityUserDetail userDetails = (SecurityUserDetail) authentication.getPrincipal();
+		SecurityUserDetail userDetails = (SecurityUserDetail) authentication.getDetails();
+		String loginId = userDetails.getDetail().getLoginId();
+		logger.debug("[Spring Security] CmsLoginSuccessHandler ::: onAuthenticationSuccess ::: {}", loginId);
 
 		// IP 설정
 		String ip = ClientUtils.getRemoteIP(request);
@@ -63,38 +65,23 @@ public class CmsLoginSuccessHandler extends SavedRequestAwareAuthenticationSucce
 
 		// checkIp의 결과가 true 인게 없을 때 허용되지 않은 IP 처리
 		if (Lists.newArrayList(allowIps).stream().filter(allowIp -> checkIp(allowIp, ip)).count() == 0) {
-			getRedirectStrategy().sendRedirect(request, response, "/login?message=" + URLEncoder.encode("아이디, 비밀번호를 확인해주세요.", "UTF-8"));
+
+			// 비밀번호 불일치 : 로그인 실패 건수 1 증가
+			securityUserService.updateFailCnt(userDetails.getUserInfo().getLoginId());
+			getRedirectStrategy().sendRedirect(request, response, "/login.do?message=" + URLEncoder.encode("모든 사용자는 지정된 PC에서만 로그인이 가능하며, 로그인 5회 실패 시 계정의 사용이 정지되니 주의해주시기 바랍니다..", "UTF-8"));
+
 		} else if(isPwInit) {
-			// 비밀번호 부여받았을 경우 새로운 비밀번호 수정해야함
-			String id = userDetails.getUserInfo().getLoginId();
-			String tempKey = DeepfineUtils.remove(DeepfineUtils.generateUUID(), "-").toLowerCase();        // 임시키
-			LocalDateTime tempExpires = LocalDateTime.now().plusMinutes(20);    // 5분 후 만료
-
-			User user = new User();
-			user.setLoginId(id);
-			user.setTempKey(tempKey);
-			user.setTempKeyExpireDt(tempExpires);
-
-			request.getSession().setAttribute("LOGIN_FAIL_PWD_EXP_KEY", user);
-
-			try {
-				securityUserService.updateChangePwdKey(user);
-			} catch (Exception e) {
-				if (logger.isErrorEnabled()) {
-					logger.debug(e.getMessage());
-				}
-			}
-			response.sendRedirect(request.getContextPath() + "/login/changePwd?lostYn=Y");
-			//getRedirectStrategy().sendRedirect(request, response, "/login/changePwd");
+			// todo: 비밀번호 부여받았을 경우 새로운 비밀번호 수정 처리 로직 구현 필요 (jm.lee)
+			response.sendRedirect(request.getContextPath() + "/reset-password.do");
 		}else {
-			logger.info("CmsLoginSuccessHandler ::: onAuthenticationSuccess ::: 로그인 성공");
+			logger.debug("Success login with (ID: '{}')", loginId);
 			response.setStatus(HttpServletResponse.SC_OK);
 
 			// 로그인 실패 횟수 초기화
 			securityUserService.loginSuccess(authentication.getName());
 
 			// todo: 로그인 성공 이력(로그) 구현 필요 (jm.lee)
-			// userService.saveHistory("LOGIN_SUCCESS", authentication.getName(), "LOGIN_SUCCESS");
+			securityUserService.saveHistory("LOGIN_SUCCESS", authentication.getName(), "LOGIN_SUCCESS");
 
 			HttpSession session = request.getSession();
 
@@ -109,14 +96,14 @@ public class CmsLoginSuccessHandler extends SavedRequestAwareAuthenticationSucce
 					SavedRequest savedRequest = requestCache.getRequest(request, response);
 
 					if (savedRequest == null) {
-						getRedirectStrategy().sendRedirect(request, response, "/dcms");
+						getRedirectStrategy().sendRedirect(request, response, "/");
 
 					} else {
 						getRedirectStrategy().sendRedirect(request, response, savedRequest.getRedirectUrl());
 					}
 				}
 			} else {
-				getRedirectStrategy().sendRedirect(request, response, "/dcms");
+				getRedirectStrategy().sendRedirect(request, response, "/");
 			}
 		}
 	}

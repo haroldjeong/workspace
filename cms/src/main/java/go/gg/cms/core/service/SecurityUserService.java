@@ -1,9 +1,17 @@
 package go.gg.cms.core.service;
 
-import go.gg.cms.domain.User;
+import com.google.common.base.Splitter;
+import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
+import go.gg.cms.core.domain.User;
+import go.gg.cms.core.domain.UserRole;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Spring Security 사용자 인증 성공/실패에 대한 이후 서비스 로직
@@ -12,28 +20,40 @@ import org.springframework.transaction.annotation.Transactional;
  * @version 1.0.0
  */
 @Service
-public class SecurityUserService extends BaseService<User, String> {
+public class SecurityUserService extends EgovAbstractMapper {
 
-	private final String QUERY_ID_PREFIX = "security";
+	protected Logger logger = LoggerFactory.getLogger(SecurityUserService.class);
+	private final String QUERY_ID_PREFIX = "go.gg.cms.core.security.";
 
 	/**
 	 * 관리자 정보 조회
 	 *
-	 * @param userId
+	 * @param loginId
 	 * @return
 	 */
-	public User getUserInfo(String userId) {
-		System.out.println("[Spring Security] SecurityUserService ::: getUserInfo ::: userId ::: " + userId);
+	public User getUserInfo(String loginId) {
+		logger.debug("Fetching to login information with '{}'", loginId);
 		User user = new User();
-		user.setLoginId(userId);
 
-		// todo: 추후 별도 쿼리로 수정 (권한정보 포함하여 조회) (jm.lee)
-		user = super.findBy(QUERY_ID_PREFIX, "LoginId", user);
+		// todo: 추후 로그인 정보 연계 필요 (일단 하드코딩) (jm.lee)
+		user.setLoginId(loginId);
+		//user.setLoginId("jm.lee");
+
+		// todo: 추후 쿼리 수정 필요 (권한(Role) 체계 확정 후, 권한정보 포함하여 조회) (jm.lee)
+		user = super.selectOne(QUERY_ID_PREFIX + "findByLoginId", user);
 
 		if (null == user) {
-			throw new UsernameNotFoundException(userId);
+			throw new UsernameNotFoundException(loginId);
 		}
 
+		// todo: 권한(Role) 체계 확정 후 구현 예정 (jm.lee)
+//		List<String> roles = Splitter.on(",").splitToList(user.getAuthorities());
+		List<String> roles = Splitter.on(",").splitToList("ROLE_MASTER,ROLE_MANAGER");
+		List<UserRole> managerRoles = roles.stream().map(roleId -> {
+			return new UserRole(loginId, roleId);
+		}).collect(Collectors.toList());
+
+		user.setRoles(managerRoles);
 		return user;
 	}
 
@@ -76,11 +96,11 @@ public class SecurityUserService extends BaseService<User, String> {
 	@Transactional
 	public int updateFailCnt(User user) {
 		if (null != user) {
-			// 로그인 실패횟수 Update (초기화)
-			super.update(QUERY_ID_PREFIX, "LoginFail", user);
+			// todo: 로그인 실패횟수 Update
+			//super.update(QUERY_ID_PREFIX, "LoginFail", user);
 			return user.getLoginFail() + 1;
 		} else {
-			return 0;
+			return 9999;
 		}
 	}
 
@@ -139,6 +159,7 @@ public class SecurityUserService extends BaseService<User, String> {
 	 * @param description 그 외 설명문구
 	 */
 	public void saveHistory(String historyType, String loginId, String description) {
+		logger.debug("[LOGIN HISTORY] {}, {}, {}", historyType, loginId, description);
 		// todo: 관리자 이력 생성 로직 구현 필요 (jm.lee)
 	}
 }

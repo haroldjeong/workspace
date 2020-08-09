@@ -5,14 +5,17 @@
 	security-mapper.xml
 	@author jm.lee (DEEP.FINE)
 -->
-<mapper namespace="go.gg.cms.apps.security">
+<mapper namespace="go.gg.cms.core.security">
 	<!-- 로그인 조회 -->
 	<select id="findByLoginId" parameterType="CmsUser" resultType="CmsUser">
-		/* SQL_ID : go.gg.cms.apps.security.findByLoginId */
+		/* SQL_ID : go.gg.cms.core.security.findByLoginId */
 		<![CDATA[
 		SELECT
 			u_id.id AS id
 			, u_id.login_id AS login_id
+			, u_pw.login_pw AS login_pw
+			, u_id.salt AS salt
+			, row_number() over(order by u_pw.reg_date desc) AS row_num
 			, u_id.login_fail AS login_fail
 			, u_id.user_type AS user_type
 			, u_id.status AS status
@@ -27,13 +30,16 @@
 			, getFilePath(u_id.profile_file_id) AS profile_photo
 		FROM
 			tb_user as u_id
+		INNER JOIN tb_user_pw as u_pw
+		ON u_id.id = u_pw.user_id
 		LEFT OUTER JOIN tb_user_group as u_group
 		ON u_id.group_id = u_group.id
 		]]>
 		<where>
 			u_id.status <![CDATA[<>]]> 'REMOVED'
-			AND u_id.id = #{id}::UUID
+			AND u_id.login_id = #{loginId}
 		</where>
+		ORDER BY row_num ASC
 		LIMIT 1
 	</select>
 </mapper>

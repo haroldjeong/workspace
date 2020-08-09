@@ -1,9 +1,9 @@
-package go.gg.cms.domain;
+package go.gg.cms.core.domain;
 
-import go.gg.cms.core.domain.Database;
 import org.apache.ibatis.type.Alias;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * CMS 관리자 도메인
@@ -27,6 +27,11 @@ public class User extends Database {
 
 	// 비밀번호 초기화 여부
 	private boolean isPwInit;
+
+	// 관리자
+
+	// 관리자 권한 목록
+	private List<UserRole> roles;
 
 	// 검색조건
 	private String searchChannel;
@@ -75,6 +80,14 @@ public class User extends Database {
 
 	public void setPwInit(boolean pwInit) {
 		isPwInit = pwInit;
+	}
+
+	public List<UserRole> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<UserRole> roles) {
+		this.roles = roles;
 	}
 
 	public String getLoginId() {

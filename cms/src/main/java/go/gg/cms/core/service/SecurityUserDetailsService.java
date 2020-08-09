@@ -1,7 +1,7 @@
 package go.gg.cms.core.service;
 
 import go.gg.cms.core.domain.SecurityUserDetail;
-import go.gg.cms.domain.User;
+import go.gg.cms.core.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,6 +27,7 @@ public class SecurityUserDetailsService implements UserDetailsService {
 		if (user == null) {
 			throw new UsernameNotFoundException(userId);
 		}
+
 		return new SecurityUserDetail(user);
 	}
 }
