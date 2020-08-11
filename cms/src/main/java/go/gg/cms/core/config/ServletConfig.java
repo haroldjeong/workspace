@@ -80,7 +80,10 @@ public class ServletConfig extends WebMvcConfigurationSupport {
 
 	@Bean
 	public SessionLocaleResolver localeResolver(){
-		return new SessionLocaleResolver();
+		SessionLocaleResolver localeResolver = new SessionLocaleResolver();
+		// Set default locale in session.
+		localeResolver.setDefaultLocale(Locale.KOREAN);
+		return localeResolver;
 	}
 
 	/*

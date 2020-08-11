@@ -35,14 +35,19 @@ import egovframework.rte.fdl.cmmn.trace.manager.TraceHandlerService;
 public class CommonConfig {
 
 	@Bean
-	public ReloadableResourceBundleMessageSource messageSource(){
+	public ReloadableResourceBundleMessageSource messageSource() {
 		ReloadableResourceBundleMessageSource rrbms = new ReloadableResourceBundleMessageSource();
-		rrbms.setBasenames(new String[]{"classpath:egovframework/message/message-common"
-				, "classpath:egovframework/rte/fdl/idgnr/messages/idgnr"
-				, "classpath:egovframework/rte/fdl/property/messages/properties"});
+		// 메세지 프로퍼티파일의 위치와 이름을 지정한다.
+		rrbms.setBasename("classpath:/message/message-common");
+		// 기본 인코딩을 지정한다.
+		rrbms.setDefaultEncoding("UTF-8");
+		// 프로퍼티 파일의 변경을 감지할 시간 간격을 지정한다.
 		rrbms.setCacheSeconds(60);
+		// 없는 메세지일 경우 예외를 발생시키는 대신 코드를 기본 메세지로 한다.
+		rrbms.setUseCodeAsDefaultMessage(true);
 		return rrbms;
 	}
+
 
 	@Bean
 	public LeaveaTrace leaveaTrace(DefaultTraceHandleManager traceHandlerService){

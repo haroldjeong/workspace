@@ -12,7 +12,7 @@
 
 				<div class="ibox ibox-search">
 					<div class="ibox-title">
-						<h5>검색조건 </h5>
+						<h5><spring:message code="search.condition"></spring:message></h5>
 						<div class="ibox-tools">
 							<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
 						</div>
@@ -20,23 +20,23 @@
 					<div class="ibox-content pb-0">
 						<div class="form-row">
 							<div class="form-group col-lg-3">
-								<label for="searchCategory"><strong>카테고리 </strong></label>
+								<label for="searchCategory"><strong><spring:message code="search.category"></spring:message> </strong></label>
 								<select class="form-control" name="searchCategory" id="searchCategory">
-									<option value="">전체</option>
+									<option value=""><spring:message code="search.all"></spring:message></option>
 									<c:forEach varStatus="status" items="${code:findListByPathCd(codeSet, 'ROOT.workflow_group')}" var="category" >
 										<option value="<c:out value="${category.id}"/>" <c:if test="${category.id eq condition.searchCategory}"> selected="selected"</c:if>><c:out value="${category.name}"/></option>
 									</c:forEach>
 								</select>
 							</div>
 							<div class="form-group col-lg-3">
-								<label for="searchCondition"><strong>검색구분</strong></label>
+								<label for="searchCondition"><strong><spring:message code="search.condition"></spring:message> </strong></label>
 								<select class="form-control" name="searchCondition" id="searchCondition">
-									<option value="name" <c:if test="${condition.searchCondition eq 'name'}"> selected="selected"</c:if> >제목</option>
-									<option value="long_desc" <c:if test="${condition.searchCondition eq 'long_desc'}"> selected="selected"</c:if> >상세내용</option>
+									<option value="name" <c:if test="${condition.searchCondition eq 'name'}"> selected="selected"</c:if> ><spring:message code="common.title"></spring:message></option>
+									<option value="long_desc" <c:if test="${condition.searchCondition eq 'long_desc'}"> selected="selected"</c:if> ><spring:message code="common.content"></spring:message></option>
 								</select>
 							</div>
 							<div class="form-group col-lg-6">
-								<label for="searchKeyword"><strong>검색어</strong></label>
+								<label for="searchKeyword"><strong><spring:message code="search.keword"></spring:message> </strong></label>
 								<div class="input-group input-group">
 									<input class="form-control" placeholder="검색구분 선택 후, 검색어를 입력해주세요." name="searchKeyword" id="searchKeyword" value="<c:out value="${condition.searchKeyword}" />" autocomplete="off" />
 									<div class="input-group-append">
