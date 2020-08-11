@@ -31,28 +31,28 @@
 					</div>
 					<div class="ibox-content">
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">카테고리</label>
+							<label class="col-sm-3 col-form-label"><spring:message code="sample.list.category" text="카테고리" /></label>
 							<div class="col-sm-9">
 								<p class="form-control-static"><c:out value="${code:findById(codeSet, result.categoryCd)}"/></p>
 							</div>
 						</div>
 						<div class="hr-line-dashed"></div>
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">제목</label>
+							<label class="col-sm-3 col-form-label"><spring:message code="sample.list.title" text="제목" /></label>
 							<div class="col-sm-9">
 								<p class="form-control-static"><c:out value="${result.name}"/></p>
 							</div>
 						</div>
 						<div class="hr-line-dashed"></div>
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">짧은 내용</label>
+							<label class="col-sm-3 col-form-label"><spring:message code="sample.form.shortDesc" text="짧은 내용" /></label>
 							<div class="col-sm-9">
 								<p class="form-control-static"><c:out value="${result.shortDesc}"/></p>
 							</div>
 						</div>
 						<div class="hr-line-dashed"></div>
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">긴 내용</label>
+							<label class="col-sm-3 col-form-label"><spring:message code="sample.form.longDesc" text="긴 내용" /></label>
 							<div class="col-sm-9">
 								<p class="form-control-static"><c:out value="${result.longDesc}"/></p>
 							</div>
@@ -71,14 +71,14 @@
 					</div>
 					<div class="ibox-content">
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">등록일시</label>
+							<label class="col-sm-3 col-form-label"><spring:message code="sample.list.regdate" text="등록 일시" /></label>
 							<div class="col-sm-9">
 								<p class="form-control-static"><javatime:format value="${result.regDate}" style="LL" /></p>
 							</div>
 						</div>
 						<div class="hr-line-dashed"></div>
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">등록자</label>
+							<label class="col-sm-3 col-form-label"><spring:message code="sample.list.regid" text="등록자" /></label>
 							<div class="col-sm-9">
 								<p class="form-control-static"><c:out value="${result.regId}"/></p>
 							</div>
@@ -86,14 +86,14 @@
 						<c:if test="${not empty result.modId}" >
 							<div class="hr-line-dashed"></div>
 							<div class="form-group row">
-								<label class="col-sm-3 col-form-label">수정일시</label>
+								<label class="col-sm-3 col-form-label"><spring:message code="sample.list.moddate" text="수정 일시" /></label>
 								<div class="col-sm-9">
 									<p class="form-control-static"><javatime:format value="${result.modDate}" style="LL" /></p>
 								</div>
 							</div>
 							<div class="hr-line-dashed"></div>
 							<div class="form-group row">
-								<label class="col-sm-3 col-form-label">수정자</label>
+								<label class="col-sm-3 col-form-label"><spring:message code="sample.list.modid" text="수정자" /></label>
 								<div class="col-sm-9">
 									<p class="form-control-static"><c:out value="${result.modId}"/></p>
 								</div>
@@ -107,11 +107,11 @@
 	<div class="row">
 		<div class="col-lg-12">
 			<div class="btn-group pull-left">
-				<button type="button" class="btn btn-white _flow-action-save" data-uri="remove.do" title="삭제" data-confirm="삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."><i class="fa fa-trash"></i> 삭제</button>
+				<button type="button" class="btn btn-white _flow-action-save" data-uri="remove.do" title="<spring:message code="button.delete" text="삭제" />" data-confirm="<spring:message code="button.delete.confirm" text="삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다." />"><i class="fa fa-trash"></i> <spring:message code="button.delete" text="삭제" /></button>
 			</div>
 			<div class="btn-group pull-right">
-				<button type="button" class="btn btn-white _flow-action-form" title="수정" data-id="${result.id}"><i class="fa fa-save"></i> 수정</button>
-				<button type="button" class="btn btn-white _flow-action-list" title="목록"><i class="fa fa-undo"></i> 목록으로</button>
+				<button type="button" class="btn btn-white _flow-action-form" title="<spring:message code="button.modified" text="수정" />" data-id="${result.id}"><i class="fa fa-save"></i> <spring:message code="button.modified" text="수정" /></button>
+				<button type="button" class="btn btn-white _flow-action-list" title="<spring:message code="button.list" text="목록" />"><i class="fa fa-undo"></i> <spring:message code="button.list" text="목록" /></button>
 			</div>
 		</div>
 	</div>

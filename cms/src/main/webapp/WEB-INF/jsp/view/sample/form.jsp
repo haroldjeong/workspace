@@ -21,7 +21,7 @@
 
 				<div class="ibox ">
 					<div class="ibox-title">
-						<h5>기본정보</h5>
+						<h5><spring:message code="sample.form.hedertitle" text="기본정보" /></h5>
 						<div class="ibox-tools">
 							<a class="collapse-link">
 								<i class="fa fa-chevron-up"></i>
@@ -30,10 +30,10 @@
 					</div>
 					<div class="ibox-content">
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">카테고리<small class="text-danger"> *</small></label>
+							<label class="col-sm-3 col-form-label"><spring:message code="sample.list.category" text="카테고리" /><small class="text-danger"> *</small></label>
 							<div class="col-sm-9">
 								<select class="form-control" name="categoryCd" title="카테고리는 필수 선택 항목입니다." autocomplete="off" required="required">
-									<option value="">선택하세요.</option>
+									<option value=""><spring:message code="common.choice.category" text="선택하세요." /></option>
 									<c:forEach varStatus="status" items="${code:findListByPathCd(codeSet, 'ROOT.workflow_group')}" var="category" >
 										<option value="<c:out value="${category.id}"/>" <c:if test="${category.id eq result.categoryCd}"> selected="selected"</c:if>><c:out value="${category}"/></option>
 									</c:forEach>
@@ -42,28 +42,28 @@
 						</div>
 						<div class="hr-line-dashed"></div>
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">제목<small class="text-danger"> *</small></label>
+							<label class="col-sm-3 col-form-label"><spring:message code="sample.list.title" text="제목" /><small class="text-danger"> *</small></label>
 							<div class="col-sm-9">
 								<input type="text" class="form-control" name="name" value="<c:out value="${result.name}"/>" title="제목은 필수 입력 항목입니다." maxlength="30" autocomplete="off" required="required"/>
 							</div>
 						</div>
 						<div class="hr-line-dashed"></div>
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">짧은 내용</label>
+							<label class="col-sm-3 col-form-label"><spring:message code="sample.form.shortDesc" text="짧은 내용" /></label>
 							<div class="col-sm-9">
 								<input type="text" class="form-control" name="shortDesc" value="<c:out value="${result.shortDesc}"/>" maxlength="50" autocomplete="off" />
 							</div>
 						</div>
 						<div class="hr-line-dashed"></div>
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">긴 내용<small class="text-danger"> *</small></label>
+							<label class="col-sm-3 col-form-label"><spring:message code="sample.form.longDesc" text="긴 내용" /><small class="text-danger"> *</small></label>
 							<div class="col-sm-9">
 								<input type="text" class="form-control" name="longDesc" value="<c:out value="${result.longDesc}"/>" title="긴 내용은 필수 입력 항목입니다." autocomplete="off" required="required"/>
 							</div>
 						</div>
 						<div class="hr-line-dashed"></div>
 						<div class="form-group row">
-							<label class="col-sm-3 col-form-label">테스트 일자<small class="text-danger"> *</small></label>
+							<label class="col-sm-3 col-form-label"><spring:message code="sample.list.testdate" text="테스트 일자" /><small class="text-danger"> *</small></label>
 							<div class="col-sm-9">
 								<div class="input-group date _flow-init-datepicker future">
 									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
@@ -78,14 +78,25 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-12">
+
+			<div class="btn-group pull-left">
+
+			</div>
+			<div class="btn-group pull-right">
+				<button type="button" class="btn btn-white _flow-action-form" title="<spring:message code="button.modified" text="수정" />" data-id="${result.id}"><i class="fa fa-save"></i> <spring:message code="button.modified" text="수정" /></button>
+
+			</div>
+
+
+
 			<div class="btn-group pull-left">
 				<c:if test="${!empty condition.id}">
-					<button type="button" class="btn btn-white _flow-action-save" data-uri="remove.do" title="삭제" data-confirm="삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다."><i class="fa fa-trash"></i> 삭제</button>
+					<button type="button" class="btn btn-white _flow-action-save" data-uri="remove.do" title="<spring:message code="button.delete" text="삭제" />" data-confirm="<spring:message code="button.delete.confirm" text="삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다." />"><i class="fa fa-trash"></i> <spring:message code="button.delete" text="삭제" /></button>
 				</c:if>
 			</div>
 			<div class="btn-group pull-right">
-				<button type="button" class="btn btn-white _flow-action-save" title="저장" data-confirm="입력 내용을 저장하시겠습니까?" data-validation="Y"><i class="fa fa-save"></i> 저장</button>
-				<button type="button" class="btn btn-white _flow-action-list" title="목록"><i class="fa fa-undo"></i> 목록으로</button>
+				<button type="button" class="btn btn-white _flow-action-save" title="<spring:message code="button.create" text="등록" />" data-confirm="<spring:message code="button.create.confirm" text="입력 내용을 저장하시겠습니까?" />" data-validation="Y"><i class="fa fa-save"></i> <spring:message code="button.create" text="등록" /></button>
+				<button type="button" class="btn btn-white _flow-action-list" title="<spring:message code="button.list" text="목록" />"><i class="fa fa-undo"></i> <spring:message code="button.list" text="목록" /></button>
 			</div>
 		</div>
 	</div>
