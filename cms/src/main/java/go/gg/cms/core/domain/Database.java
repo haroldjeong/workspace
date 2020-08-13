@@ -1,6 +1,8 @@
 package go.gg.cms.core.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import go.gg.cms.core.util.ClientUtils;
+import go.gg.cms.core.util.UserUtils;
 import org.springframework.data.domain.Sort;
 
 import java.time.LocalDateTime;
@@ -27,11 +29,11 @@ public abstract class Database extends CmsBase {
 	private LocalDateTime regDate;						// 등록 일자
 	private String regId;								// 등록 아이디
 	private String regIP;								// 등록 IP주소
-	private String reg_agent;							// 등록 User Agent
+	private String regAgent;							// 등록 User Agent
 	private LocalDateTime modDate;						// 수정 일자
 	private String modId;								// 수정 아이디
-	private String modIP;								// 수정 IP주소
-	private String mod_agent;							// 수정 User Agent
+	private String modIp;								// 수정 IP주소
+	private String modAgent;							// 수정 User Agent
 	private String useYn;								// 사용여부
 	private String delYn;								// 삭제여부
 	private String regIp;								// 접속 IP Address
@@ -115,6 +117,10 @@ public abstract class Database extends CmsBase {
 		return regId;
 	}
 
+	public void setRegId() {
+		this.regId = UserUtils.getUserInfo().getId();
+	}
+
 	public void setRegId(String regId) {
 		this.regId = regId;
 	}
@@ -129,6 +135,10 @@ public abstract class Database extends CmsBase {
 
 	public String getModId() {
 		return modId;
+	}
+
+	public void setModId() {
+		this.modId = UserUtils.getUserInfo().getId();
 	}
 
 	public void setModId(String modId) {
@@ -331,6 +341,10 @@ public abstract class Database extends CmsBase {
 		return regIp;
 	}
 
+	public void setRegIp() {
+		this.regIp = ClientUtils.getRemoteIP();
+	}
+
 	public void setRegIp(String regIp) {
 		this.regIp = regIp;
 	}
@@ -415,27 +429,39 @@ public abstract class Database extends CmsBase {
 		this.regIP = regIP;
 	}
 
-	public String getReg_agent() {
-		return reg_agent;
+	public String getRegAgent() {
+		return regAgent;
 	}
 
-	public void setReg_agent(String reg_agent) {
-		this.reg_agent = reg_agent;
+	public void setRegAgent() {
+		this.regAgent = ClientUtils.getUserAgent();
 	}
 
-	public String getModIP() {
-		return modIP;
+	public void setRegAgent(String regAgent) {
+		this.regAgent = regAgent;
 	}
 
-	public void setModIP(String modIP) {
-		this.modIP = modIP;
+	public String getModIp() {
+		return modIp;
 	}
 
-	public String getMod_agent() {
-		return mod_agent;
+	public void setModIp() {
+		this.modIp = ClientUtils.getRemoteIP();;
 	}
 
-	public void setMod_agent(String mod_agent) {
-		this.mod_agent = mod_agent;
+	public void setModIp(String modIp) {
+		this.modIp = modIp;
+	}
+
+	public String getModAgent() {
+		return modAgent;
+	}
+
+	public void setModAgent() {
+		this.modAgent = ClientUtils.getUserAgent();
+	}
+
+	public void setModAgent(String modAgent) {
+		this.modAgent = modAgent;
 	}
 }

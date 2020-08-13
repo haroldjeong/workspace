@@ -1,14 +1,13 @@
 package go.gg.cms.core.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.google.common.collect.Sets;
-import go.gg.common.domain.Base;
 import go.gg.common.util.DeepfineUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.Alias;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -22,13 +21,13 @@ import java.util.Set;
 //@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonInclude(Include.NON_EMPTY)
 @Alias("CommonCode")
-public class Code extends Base implements Comparable<Code>{
+public class Code extends Database implements Comparable<Code>{
 
 	private static final long serialVersionUID = 1170130672008639172L;
 
-	private String id;					// 아이디
 	private String parentId;			// 부모 코드
 	private String cd;					// 코드
+	private String depth;				// Depth (Level)
 	private String name;				// 이름
 	private String longDesc;			// 긴 이름
 	private String shrtDesc;			// 짧은 이름
@@ -42,6 +41,9 @@ public class Code extends Base implements Comparable<Code>{
 
 	private String pathId;
 	private String pathCd;
+	private String pathName;
+
+	private List<Code> codes;
 
 	private Map<String, String> nameMap;	// 다국어맵
 	private Set<Code> children = Sets.newTreeSet();		// 자식코드
@@ -147,14 +149,6 @@ public class Code extends Base implements Comparable<Code>{
 		this.setNameMap(nameMap);
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public String getParentId() {
 		return parentId;
 	}
@@ -169,6 +163,14 @@ public class Code extends Base implements Comparable<Code>{
 
 	public void setCd(String cd) {
 		this.cd = cd;
+	}
+
+	public String getDepth() {
+		return depth;
+	}
+
+	public void setDepth(String depth) {
+		this.depth = depth;
 	}
 
 	public String getName() {
@@ -310,6 +312,22 @@ public class Code extends Base implements Comparable<Code>{
 
 	public void setPathCd(String pathCd) {
 		this.pathCd = pathCd;
+	}
+
+	public String getPathName() {
+		return pathName;
+	}
+
+	public void setPathName(String pathName) {
+		this.pathName = pathName;
+	}
+
+	public List<Code> getCodes() {
+		return codes;
+	}
+
+	public void setCodes(List<Code> codes) {
+		this.codes = codes;
 	}
 
 	public static Code create(String parentId, String cd, String name) {

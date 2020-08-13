@@ -110,7 +110,7 @@
 						</ul>
 					</li>
 					<li>
-						<a href="#">공통코드 관리</a>
+						<a href="<c:url value="/code/list.do"/>">공통코드 관리</a>
 					</li>
 					<li>
 						<a href="#">메시지 이력 관리<span class="fa arrow"></span></a>

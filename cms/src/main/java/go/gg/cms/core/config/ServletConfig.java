@@ -45,9 +45,12 @@ import java.util.*;
 @Configuration
 @ComponentScan(
 		basePackages="go.gg.cms",
+		useDefaultFilters=false,
 		includeFilters={
 				@ComponentScan.Filter(type=FilterType.ANNOTATION, value=Controller.class)
-				, @ComponentScan.Filter(type=FilterType.ANNOTATION, value=Service.class)
+		},
+		excludeFilters = {
+				@ComponentScan.Filter(type=FilterType.ANNOTATION, value=Service.class)
 				, @ComponentScan.Filter(type=FilterType.ANNOTATION, value=Repository.class)
 				, @ComponentScan.Filter(type=FilterType.ANNOTATION, value=Configuration.class)
 		}

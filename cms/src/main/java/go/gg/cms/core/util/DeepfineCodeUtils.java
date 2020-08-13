@@ -61,7 +61,7 @@ public class DeepfineCodeUtils {
 		List<Code> findCodeList = Lists.newArrayList();
 
 		for (JsonNode code : jsonNode) {
-			if (code.get("pathCd").asText().startsWith("{" + pathCd + ".")) {
+			if (code.get("pathCd").asText().startsWith(pathCd + ".")) {
 
 				Code findCode = new Code(code.get("parentId").asText(), code.get("cd").asText(), code.get("name").asText());
 				findCode.setId(code.get("id").asText());

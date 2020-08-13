@@ -96,13 +96,13 @@
 					});
 			},
 			post: function(o, isLoading) {
-				isLoading = (isLoading == undefined || isLoading == null) ? true : isLoading;
+				isLoading = (isLoading === undefined || isLoading === null) ? true : isLoading;
 				var options = {
 					method: "POST"
-					//, contentType: "application/json; charset=utf-8"
+					, contentType: 'application/json'
 					, dataType: "JSON"
 				};
-				if (typeof o == "string") {
+				if (typeof o === "string") {
 					options.url = o;
 				} else {
 					$.extend(options, o);
