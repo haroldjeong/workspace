@@ -19,7 +19,7 @@ import java.util.List;
  * @since 2020.07.16
  * @version 1.0.0
  */
-@Controller("apps.code.controller")
+@Controller("core.code.controller")
 @RequestMapping({"code"})
 public class CodeController extends BaseController {
 

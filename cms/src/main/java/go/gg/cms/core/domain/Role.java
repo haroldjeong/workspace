@@ -1,5 +1,7 @@
 package go.gg.cms.core.domain;
 
+import java.util.List;
+
 /**
  * CMS 룰 도메인 (tb_role)
  * @author jh.park (DEEP.FINE)
@@ -14,6 +16,54 @@ public class Role extends Database {
 	private String roleCd;
 	private String name;
 	private String roleDesc;
+
+	private List<String> menus;
+
+	private String readYn;
+	private String writeYn;
+	private String deleteYn;
+	private String downYn;
+
+
+	public List<String> getMenus() {
+		return menus;
+	}
+
+	public void setMenus(List<String> menus) {
+		this.menus = menus;
+	}
+
+	public String getReadYn() {
+		return readYn;
+	}
+
+	public void setReadYn(String readYn) {
+		this.readYn = readYn;
+	}
+
+	public String getWriteYn() {
+		return writeYn;
+	}
+
+	public void setWriteYn(String writeYn) {
+		this.writeYn = writeYn;
+	}
+
+	public String getDeleteYn() {
+		return deleteYn;
+	}
+
+	public void setDeleteYn(String deleteYn) {
+		this.deleteYn = deleteYn;
+	}
+
+	public String getDownYn() {
+		return downYn;
+	}
+
+	public void setDownYn(String downYn) {
+		this.downYn = downYn;
+	}
 
 	public String getRoleCd() {
 		return roleCd;

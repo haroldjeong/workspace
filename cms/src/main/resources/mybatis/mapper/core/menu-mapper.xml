@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+	menu-mapper.xml
+	@author jh.park (DEEP.FINE)
+-->
+<mapper namespace="go.gg.cms.core.commonMenu">
+
+	<!-- 공통메뉴 전체목록 조회 -->
+	<select id="findMenuCache" parameterType="CommonMenu" resultType="CommonMenu">
+		/* SQL_ID : go.gg.cms.core.commonMenu.findMenuCache */
+		<![CDATA[
+			WITH RECURSIVE MENU_LIST (id, disp_cd, parent_id, disp_seq, link_url, link_type, icon_type, use_yn, depth, path_id, path_cd, path_name, path_seq, cycle) AS
+			(
+			  SELECT a.id::TEXT
+			    , a.disp_cd::TEXT
+			    , a.parent_id::TEXT
+			    , a.disp_seq
+			    , a.link_url
+			    , a.link_type
+			    , a.icon_type
+			    , a.use_yn
+			    , 1 AS depth
+			    , ARRAY[a.id::TEXT]
+			    , ARRAY[a.disp_cd::TEXT]
+			    , ARRAY['ROOT'::TEXT]
+			    , ARRAY[a.disp_seq::TEXT]
+			    , false
+			    , false
+			    , false
+			  FROM tb_menu a
+			  WHERE a.disp_cd = 'ROOT'
+			        AND a.parent_id IS NULL
+			  UNION ALL
+			  SELECT a.id::TEXT
+			    , a.disp_cd::TEXT
+			    , a.parent_id::TEXT
+			    , a.disp_seq
+			    , a.link_url
+			    , a.link_type
+			    , a.icon_type
+			    , a.use_yn
+			    , b.depth + 1
+			    , ARRAY_APPEND(b.path_id, a.id::TEXT)
+			    , ARRAY_APPEND(b.path_cd, a.disp_cd::TEXT)
+			    , ARRAY_APPEND(b.path_name, ml.name::TEXT)
+			    , ARRAY_APPEND(b.path_seq, a.disp_seq::TEXT)
+			    , a.id::TEXT = ANY(b.path_id)
+			    , a.disp_cd::TEXT = ANY(b.path_cd)
+			    , a.disp_seq::TEXT = ANY(b.path_seq)
+			  FROM tb_menu AS a
+			    INNER JOIN tb_menu_ml AS ml
+			    ON a.id = ml.parent_id
+			    INNER JOIN MENU_LIST AS b
+			    ON a.parent_id::TEXT = b.id
+			        AND a.del_yn = 'N'
+		]]>
+		<if test="searchUseYn != null and searchUseYn != ''">
+			        AND a.use_yn = 'Y'
+		</if>
+		<![CDATA[
+			        AND ml.lang_cd = 'ko'
+			        AND NOT CYCLE
+			)
+			SELECT mn.id
+			  , mn.disp_cd AS cd
+			  , mn.parent_id
+			  , ml.name
+			  , ml.short_desc AS shrt_desc
+			  , ml.long_desc AS long_desc
+			  , mn.disp_seq AS seq
+			  , mn.use_yn
+			  , mn.depth
+			  , mn.link_url
+			  , mn.link_type
+			  , mn.icon_type
+			  , regexp_replace(REPLACE(mn.path_id::TEXT, ',', '.'), '[}{"]', '', 'g') AS path_id
+			  , regexp_replace(REPLACE(mn.path_cd::TEXT, ',', '.'), '[}{"]', '', 'g') AS path_cd
+			  , regexp_replace(REPLACE(mn.path_name::TEXT, ',', '.'), '[}{"]', '', 'g') AS path_name
+			  , mn.path_seq
+			  , (SELECT COUNT(id) FROM tb_menu a WHERE a.del_yn = 'N' AND mn.id = a.parent_id::TEXT) AS child_cnt
+			FROM MENU_LIST AS mn
+			  LEFT OUTER JOIN tb_menu_ml AS ml
+			    ON mn.id = ml.parent_id::TEXT
+			WHERE ml.lang_cd = 'ko'
+			/* ORDER BY path_seq */
+			ORDER BY seq
+		]]>
+	</select>
+
+	<!-- 공통메뉴 2 Depth 목록 조회 (ROOT: 1 Depth) -->
+	<select id="findFirstDepth" parameterType="CommonMenu" resultType="CommonMenu">
+		/* SQL_ID : go.gg.cms.core.commonMenu.findFirstDepth */
+		<![CDATA[
+			SELECT mn.id
+				  , mn.disp_cd AS cd
+				  , mn.parent_id
+				  , ml.name
+				  , ml.short_desc AS shrt_desc
+				  , ml.long_desc AS long_desc
+				  , mn.disp_seq AS seq
+				  , mn.use_yn
+				  , mn.link_url
+			  	  , mn.link_type
+			  	  , mn.icon_type
+				  , (SELECT COUNT(id) FROM tb_menu a WHERE a.del_yn = 'N' AND mn.id = a.parent_id) AS child_cnt
+			  FROM tb_menu AS mn
+			  LEFT OUTER JOIN tb_menu_ml AS ml
+				ON mn.id = ml.parent_id
+			 WHERE mn.parent_id = (SELECT id FROM tb_menu WHERE disp_cd = 'ROOT' AND parent_id IS NULL LIMIT 1)
+			 AND mn.del_yn = 'N'
+			 AND ml.lang_cd = 'ko'
+			 ORDER BY mn.disp_seq
+		]]>
+	</select>
+
+	<!-- ROOT 메뉴 조회 -->
+	<select id="findRooTMenu" parameterType="CommonMenu" resultType="CommonMenu">
+		/* SQL_ID : go.gg.cms.core.commonMenu.findFirstDepth */
+		<![CDATA[
+			SELECT id
+			FROM tb_menu
+			WHERE disp_cd = 'ROOT'
+			AND parent_id IS NULL LIMIT 1
+		]]>
+	</select>
+
+	<!-- 공통메뉴 상세정보 조회 -->
+	<select id="findById" parameterType="CommonMenu" resultType="CommonMenu">
+		/* SQL_ID : go.gg.cms.core.commonMenu.findById */
+		<![CDATA[
+			SELECT mn.id
+			  , mn.disp_cd AS cd
+			  , mn.parent_id
+			  , ml.name
+			  , ml.short_desc AS shrt_desc
+			  , ml.long_desc AS long_desc
+			  , mn.disp_seq AS seq
+			  , mn.use_yn
+			  , mn.link_url
+			  , mn.link_type
+			  , mn.icon_type
+			  , (SELECT COUNT(id) FROM tb_menu a WHERE a.del_yn = 'N' AND mn.id = a.parent_id) AS child_cnt
+			FROM tb_menu AS mn
+			  LEFT OUTER JOIN tb_menu_ml AS ml
+			    ON mn.id = ml.parent_id
+			WHERE mn.id = #{id}::uuid
+		    AND mn.del_yn = 'N'
+		    AND ml.lang_cd = 'ko'
+		]]>
+	</select>
+
+	<!-- 하위메뉴 추가 (마스터) -->
+	<insert id="insertMaster" parameterType="CommonMenu">
+		/* SQL_ID : go.gg.cms.core.commonMenu.insertMaster */
+		<![CDATA[
+			INSERT INTO tb_menu (
+				id
+				, disp_cd
+				, parent_id
+				, disp_seq
+				, link_url
+			  	, link_type
+			  	, icon_type
+				, use_yn
+				, del_yn
+				, reg_id
+				, reg_ip
+				, reg_date
+				, reg_agent
+			) VALUES (
+				#{id}::uuid
+				, #{cd}
+				, #{parentId}::uuid
+				, #{seq, jdbcType=INTEGER}
+				, #{linkUrl}
+				, #{linkType}
+				, #{iconType}
+				, #{useYn}
+				, 'N'
+				, #{regId}::uuid
+				, #{regIp}
+				, now()
+				, #{regAgent}
+			)
+		]]>
+	</insert>
+
+	<!-- 하위메뉴 추가 (다국어) -->
+	<insert id="insertMl" parameterType="CommonMenu">
+		/* SQL_ID : go.gg.cms.core.commonMenu.insertMl */
+		<![CDATA[
+			INSERT INTO tb_menu_ml (
+				id
+				, parent_id
+				, lang_cd
+				, name
+				, short_desc
+				, long_desc
+			) VALUES (
+				uuid_generate_v4()
+				, #{id}::uuid
+				, 'ko'
+				, #{name}
+				, #{shrtDesc}
+				, #{longDesc}
+			)
+		]]>
+	</insert>
+
+	<!-- 메뉴정보 수정 (마스터) -->
+	<update id="updateMaster" parameterType="CommonMenu">
+		/* SQL_ID : go.gg.cms.core.commonMenu.updateMaster */
+		<![CDATA[
+			UPDATE tb_menu SET
+				 link_url = #{linkUrl}
+			  	, link_type = #{linkType}
+			  	, icon_type = #{iconType}
+				, use_yn = #{useYn}
+				, mod_id = #{modId}::uuid
+				, mod_ip = #{modIp}
+				, mod_date = now()
+				, mod_agent = #{modAgent}
+			WHERE id = #{id}::uuid
+		]]>
+	</update>
+
+	<!-- 메뉴정보 삭제 (다국어) -->
+	<delete id="deleteMl" parameterType="CommonMenu">
+		/* SQL_ID : go.gg.cms.core.commonMenu.deleteMl */
+		<![CDATA[
+			DELETE FROM tb_menu_ml WHERE parent_id = #{id}::uuid
+		]]>
+	</delete>
+
+	<!-- 메뉴정보 삭제 (마스터) -->
+	<update id="delete" parameterType="CommonMenu">
+		/* SQL_ID : go.gg.cms.core.commonMenu.delete */
+		<![CDATA[
+			UPDATE tb_menu SET
+				del_yn = 'Y'
+				, mod_id = #{modId}::uuid
+				, mod_ip = #{modIp}
+				, mod_date = now()
+				, mod_agent = #{modAgent}
+			WHERE id = #{id}::uuid
+		]]>
+	</update>
+
+	<!-- 메뉴 이동 및 순서변경 저장 -->
+	<update id="updateSeq" parameterType="CommonMenu">
+		/* SQL_ID : go.gg.cms.core.commonMenu.updateSeq */
+		<![CDATA[
+
+			UPDATE tb_menu SET
+			  parent_id = temp_tb_menu.parent_id
+			, disp_seq = temp_tb_menu.seq
+			, mod_date = now()
+			, mod_id = #{modId}::uuid
+			, mod_ip = #{modIp}
+			, mod_agent = #{modAgent}
+			FROM (
+		]]>
+		<foreach collection="menus" item="menu" open=" ( " separator=" ) UNION ALL ( " close=" ) ">
+			SELECT #{menu.id}::uuid AS id, #{menu.parentId}::uuid AS parent_id, #{menu.seq, jdbcType=INTEGER} AS seq
+		</foreach>
+		<![CDATA[
+			) temp_tb_menu
+			WHERE tb_menu.id = temp_tb_menu.id
+		]]>
+	</update>
+
+
+
+</mapper>

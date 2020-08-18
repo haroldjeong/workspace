@@ -2,6 +2,7 @@ package go.gg.cms.core.controller;
 
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
+import go.gg.cms.core.domain.Menu;
 import go.gg.cms.core.domain.Role;
 import go.gg.cms.core.service.RoleService;
 import go.gg.common.util.DeepfineUtils;
@@ -22,7 +23,7 @@ import java.util.List;
  * @version 1.0.0
  */
 @Controller("core.role.controller")
-@RequestMapping({"core/role"})
+@RequestMapping({"role"})
 public class RoleController extends BaseController {
 
 	@Autowired
@@ -47,7 +48,7 @@ public class RoleController extends BaseController {
 		model.addAttribute("resultList", resultList);
 		model.addAttribute("paginationInfo", paginationInfo);
 
-		return VIEW_PATH + "/list.tiles.default";
+		return "core/role/list.tiles.default";
 	}
 
 	/**
@@ -59,7 +60,7 @@ public class RoleController extends BaseController {
 	@RequestMapping("detail.do")
 	public String detail(@ModelAttribute("condition") Role condition, Model model) throws Exception {
 		model.addAttribute("result", roleService.detail(condition));
-		return VIEW_PATH + "/detail.tiles.default";
+		return "core/role/detail.tiles.default";
 	}
 
 	/**
@@ -79,7 +80,7 @@ public class RoleController extends BaseController {
 
 		model.addAttribute("result", result);
 
-		return VIEW_PATH + "/form.tiles.default";
+		return "core/role/form.tiles.default";
 	}
 
 	/**
@@ -90,12 +91,15 @@ public class RoleController extends BaseController {
 	@ResponseBody
 	@RequestMapping("save.do")
 	public Role save(@RequestBody Role condition) {
+
 		if (DeepfineUtils.isEmpty(condition.getId())) {
 			condition.initId();
 			roleService.insert(condition);
 		} else {
 			roleService.update(condition);
 		}
+		roleService.insertMenu(condition);
+
 		return condition;
 	}
 
@@ -111,6 +115,17 @@ public class RoleController extends BaseController {
 			roleService.delete(condition);
 		}
 		return condition;
+	}
+
+	/**
+	 * Role 게시판 > 전체 메뉴목록
+	 * @param condition 도메인
+	 * @return Menu List
+	 */
+	@ResponseBody
+	@RequestMapping("findMenuAll.do")
+	public List<Menu> findMenuAll(@RequestBody Menu condition) {
+		return roleService.findMenuAll(condition);
 	}
 
 }

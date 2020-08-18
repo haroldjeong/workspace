@@ -290,7 +290,6 @@ $(document).ready(function() {
 							.val('')
 							.removeAttr('checked')
 							.removeAttr('selected');
-
 						flow.$searchForm.submit();
 					});
 				});
