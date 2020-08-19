@@ -4,6 +4,7 @@ import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 import go.gg.cms.core.domain.Menu;
 import go.gg.cms.core.domain.Role;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,24 +32,39 @@ public class RoleService extends EgovAbstractMapper {
 		return selectOne(QUERY_ID_PREFIX + "findDetail", parameterObject);
 	}
 
-	public int insert(Role parameterObject) {
-		return insert(QUERY_ID_PREFIX + "insert", parameterObject);
+	@Transactional
+	public int insert(Role condition) {
+		condition.initId();
+		condition.setRegId();
+		condition.setRegIp();
+		condition.setRegAgent();
+		super.delete(QUERY_ID_PREFIX + "deleteMenuRole", condition);
+		super.insert(QUERY_ID_PREFIX + "insertMenuRole", condition);
+		return super.insert(QUERY_ID_PREFIX + "insert", condition);
 	}
 
-	public int insertMenu(Role parameterObject) {
-		delete(QUERY_ID_PREFIX + "deleteMenuRole", parameterObject);
-		return insert(QUERY_ID_PREFIX + "insertMenuRole", parameterObject);
+
+
+	@Transactional
+	public int update(Role condition) {
+		condition.setRegId();
+		condition.setRegIp();
+		condition.setRegAgent();
+		condition.setModId();
+		condition.setModIp();
+		condition.setModAgent();
+		super.delete(QUERY_ID_PREFIX + "deleteMenuRole", condition);
+		super.insert(QUERY_ID_PREFIX + "insertMenuRole", condition);
+		return super.update(QUERY_ID_PREFIX + "update", condition);
 	}
 
-
-
-
-	public int update(Role parameterObject) {
-		return update(QUERY_ID_PREFIX + "update", parameterObject);
-	}
-
-	public int delete(Role parameterObject) {
-		return delete(QUERY_ID_PREFIX + "delete", parameterObject);
+	@Transactional
+	public int delete(Role condition) {
+		condition.setModId();
+		condition.setModIp();
+		condition.setModAgent();
+		super.delete(QUERY_ID_PREFIX + "deleteMenuRole", condition);
+		return super.delete(QUERY_ID_PREFIX + "delete", condition);
 	}
 
 

@@ -6,8 +6,8 @@
 		<div class="ibox float-e-margins">
 			<div class="ibox-content mailbox-content">
 				<div class="btn-group">
-					<button class="btn btn-white btn-sm m-n" onclick="flow.render.tree.openAll();">모두 열기</button>
-					<button class="btn btn-white btn-sm m-n" onclick="flow.render.tree.closeAll();">모두 접기</button>
+					<button class="btn btn-white btn-sm m-n" onclick="flow.render.tree.openAll();"><spring:message code="code.list.allopen" text="모두 열기"/></button>
+					<button class="btn btn-white btn-sm m-n" onclick="flow.render.tree.closeAll();"><spring:message code="code.list.allclose" text="모두 접기"/></button>
 				</div>
 				<input class="form-control _flow-input-search" placeholder="search code" />
 				<div class="_flow-code-tree"></div>
@@ -19,10 +19,10 @@
 			<div class="col-lg-12">
 				<div id="_info" class="panel panel-default m-t">
 					<div class="panel-body">
-						<h3>좌측 트리에서 코드를 선택하세요.</h3>
-						<p>최상위 코드를 등록 하시려면 아래 버튼을 선택 하세요.</p>
-						<button type="button" class="btn btn-success btn-sm" title="최상위 등록" onclick="flow.render.form('ADD-TOP');">
-							<i class="fa fa-pencil-square"></i> 최상위 코드 등록
+						<h3><spring:message code="code.list.tip_01" text="좌측 트리에서 코드를 선택하세요."/></h3>
+						<p><spring:message code="code.list.tip_02" text="최상위 코드를 등록 하시려면 아래 버튼을 선택 하세요."/></p>
+						<button type="button" class="btn btn-success btn-sm" title="<spring:message code="code.list.topsave" text="최상위 코드 등록"/>" onclick="flow.render.form('ADD-TOP');">
+							<i class="fa fa-pencil-square"></i> <spring:message code="code.list.topsave" text="최상위 코드 등록"/>
 						</button>
 					</div>
 				</div>
@@ -33,11 +33,11 @@
 					<div class="panel-body">
 						<table class="table table-detail"><colgroup><col width="150"/><col/></colgroup><tbody>
 						<tr>
-							<th>코드 *</th>
+							<th><spring:message code="code.list.code" text="코드"/> *</th>
 							<td data-detail="cd"></td>
 						</tr>
 						<tr>
-							<th>표기명 *</th>
+							<th><spring:message code="code.list.name" text="표기명"/> *</th>
 							<td data-detail="name"></td>
 							<!--
 							<td>
@@ -62,7 +62,7 @@
 							-->
 						</tr>
 						<tr>
-							<th>짧은 표기명</th>
+							<th><spring:message code="code.list.shrtDesc" text="짧은 표기명"/></th>
 							<td data-detail="shrtDesc"></td>
 							<!--
 							<td>
@@ -87,7 +87,7 @@
 							-->
 						</tr>
 						<tr>
-							<th>전체 표기명</th>
+							<th><spring:message code="code.list.longDesc" text="전체 표기명"/></th>
 							<td data-detail="longDesc"></td>
 							<!--
 							<td>
@@ -112,28 +112,28 @@
 							-->
 						</tr>
 						<tr>
-							<th>사용자 정의 값1</th>
+							<th><spring:message code="code.list.customField1" text="사용자 정의 값1"/></th>
 							<td data-detail="customField1"></td>
 						</tr>
 						<tr>
-							<th>사용자 정의 값2</th>
+							<th><spring:message code="code.list.customField2" text="사용자 정의 값2"/></th>
 							<td data-detail="customField2"></td>
 						</tr>
 						<tr>
-							<th>사용자 정의 값3</th>
+							<th><spring:message code="code.list.customField3" text="사용자 정의 값3"/></th>
 							<td data-detail="customField3"></td>
 						</tr>
 						<tr>
-							<th>사용 여부 *</th>
+							<th><spring:message code="code.list.useYn" text="사용여부"/>*</th>
 							<td data-detail="useYn"></td>
 						</tr>
 						</table>
 						<div class="form-row">
 							<div class="form-group col-lg-12">
 								<div class="btn-group pull-right">
-									<button type="button" class="btn btn-white btn-sm" title="수정" onclick="flow.render.form('MODIFY');"><i class="fa fa-pencil-square"></i> 수정</button>
-									<button type="button" class="btn btn-white btn-sm" title="하위등록" onclick="flow.render.form('ADD');"><i class="fa fa-level-down"></i> 하위등록</button>
-									<button type="button" class="btn btn-white btn-sm" title="삭제" onclick="flow.bind.action.remove();"><i class="fa fa-trash-o"></i> 삭제</button>
+									<button type="button" class="btn btn-white btn-sm" title="<spring:message code="button.modified" text="수정" />" onclick="flow.render.form('MODIFY');"><i class="fa fa-pencil-square"></i> <spring:message code="button.modified" text="수정" /></button>
+									<button type="button" class="btn btn-white btn-sm" title="<spring:message code="button.create.bottom" text="하위등록" />" onclick="flow.render.form('ADD');"><i class="fa fa-level-down"></i> <spring:message code="button.create.bottom" text="하위등록" /></button>
+									<button type="button" class="btn btn-white btn-sm" title="<spring:message code="button.delete" text="삭제" />" onclick="flow.bind.action.remove();"><i class="fa fa-trash-o"></i> <spring:message code="button.delete" text="삭제" /></button>
 								</div>
 							</div>
 						</div>
@@ -151,15 +151,15 @@
 						<div class="panel-body">
 							<table class="table table-detail"><colgroup><col width="150"/><col/></colgroup><tbody>
 							<tr>
-								<th>코드 *</th>
+								<th><spring:message code="code.list.code" text="코드" /> *</th>
 								<td>
-									<input type="text" class="form-control" name="cd" value="" title="코드는 필수 입력 항목입니다." maxlength="30" autocomplete="off" data-form="cd" required="required"/>
+									<input type="text" class="form-control" name="cd" value="" title="<spring:message code="code.list.code.title" text="코드는 필수 입력 항목입니다." />" maxlength="30" autocomplete="off" data-form="cd" required="required"/>
 								</td>
 							</tr>
 							<tr>
-								<th>표기명 *</th>
+								<th><spring:message code="code.list.name" text="표기명" /> *</th>
 								<td>
-									<input type="text" class="form-control" name="name" value="" title="표기명은 필수 입력 항목입니다." maxlength="30" autocomplete="off" data-form="name" required="required"/>
+									<input type="text" class="form-control" name="name" value="" title="<spring:message code="code.list.name.title" text="표기명은 필수 입력 항목입니다." />" maxlength="30" autocomplete="off" data-form="name" required="required"/>
 								</td>
 								<!--
 								<td>
@@ -184,9 +184,9 @@
 								-->
 							</tr>
 							<tr>
-								<th>짧은 표기명</th>
+								<th><spring:message code="code.list.shrtDesc" text="짧은 표기명" /></th>
 								<td>
-									<input type="text" class="form-control" name="shrtDesc" value="" title="짧은 표기명을 입력해주세요." maxlength="30" autocomplete="off" data-form="shrtDesc" />
+									<input type="text" class="form-control" name="shrtDesc" value="" title="<spring:message code="code.list.shrtDesc.title" text="짧은 표기명을 입력해주세요." />" maxlength="30" autocomplete="off" data-form="shrtDesc" />
 								</td>
 								<!--
 								<td>
@@ -211,9 +211,9 @@
 								-->
 							</tr>
 							<tr>
-								<th>전체 표기명</th>
+								<th><spring:message code="code.list.longDesc" text="전체 표기명" /></th>
 								<td>
-									<input type="text" class="form-control" name="longDesc" value="" title="전체 표기명을 입력해주세요." maxlength="50" autocomplete="off" data-form="longDesc" />
+									<input type="text" class="form-control" name="longDesc" value="" title="<spring:message code="code.list.longDesc.title" text="전체 표기명을 입력해주세요." />" maxlength="50" autocomplete="off" data-form="longDesc" />
 								</td>
 								<!--
 								<td>
@@ -238,29 +238,29 @@
 								-->
 							</tr>
 							<tr>
-								<th>사용자 정의 값1</th>
+								<th><spring:message code="code.list.customField1" text="사용자 정의 값1" /></th>
 								<td>
-									<input type="text" class="form-control" name="customField1" value="" title="사용자 정의 값1을 입력해주세요." maxlength="30" autocomplete="off" data-form="customField1" />
+									<input type="text" class="form-control" name="customField1" value="" title="<spring:message code="code.list.customField1.title" text="사용자 정의 값1을 입력해주세요." />" maxlength="30" autocomplete="off" data-form="customField1" />
 								</td>
 							</tr>
 							<tr>
-								<th>사용자 정의 값2</th>
+								<th><spring:message code="code.list.customField2" text="사용자 정의 값2" /></th>
 								<td>
-									<input type="text" class="form-control" name="customField2" value="" title="사용자 정의 값2을 입력해주세요." maxlength="30" autocomplete="off" data-form="customField2" />
+									<input type="text" class="form-control" name="customField2" value="" title="<spring:message code="code.list.customField2.title" text="사용자 정의 값2을 입력해주세요." />" maxlength="30" autocomplete="off" data-form="customField2" />
 								</td>
 							</tr>
 							<tr>
-								<th>사용자 정의 값3</th>
+								<th><spring:message code="code.list.customField3" text="사용자 정의 값3" /></th>
 								<td>
-									<input type="text" class="form-control" name="customField3" value="" title="사용자 정의 값3을 입력해주세요." maxlength="30" autocomplete="off" data-form="customField3" />
+									<input type="text" class="form-control" name="customField3" value="" title="<spring:message code="code.list.customField3.title" text="사용자 정의 값3을 입력해주세요." />" maxlength="30" autocomplete="off" data-form="customField3" />
 								</td>
 							</tr>
 							<tr>
-								<th>사용 여부 *</th>
+								<th><spring:message code="code.list.useYn" text="사용여부" /> *</th>
 								<td>
-									<select class="form-control" name="useYn" title="사용 여부는 필수 선택 항목입니다." data-form="useYn" required="required">
-										<option value="Y">사용</option>
-										<option value="N">미사용</option>
+									<select class="form-control" name="useYn" title="<spring:message code="code.list.useYn.title" text="사용 여부는 필수 선택 항목입니다." />" data-form="useYn" required="required">
+										<option value="Y"><spring:message code="common.useY" text="사용" /></option>
+										<option value="N"><spring:message code="common.useN" text="미사용" /></option>
 									</select>
 								</td>
 							</tr>
@@ -268,8 +268,8 @@
 							<div class="form-row">
 								<div class="form-group col-lg-12">
 									<div class="btn-group pull-right">
-										<button type="button" class="btn btn-white btn-sm" title="저장" onclick="flow.bind.action.save();"><i class="fa fa-pencil-square"></i> 저장</button>
-										<button type="button" class="btn btn-white btn-sm" title="취소" onclick="flow.render.form('CANCEL');"><i class="fa fa-repeat"></i> 취소</button>
+										<button type="button" class="btn btn-white btn-sm" title="<spring:message code="button.save" text="저장" />" onclick="flow.bind.action.save();"><i class="fa fa-pencil-square"></i> <spring:message code="button.save" text="저장" /></button>
+										<button type="button" class="btn btn-white btn-sm" title="<spring:message code="button.cancle" text="취소" />" onclick="flow.render.form('CANCEL');"><i class="fa fa-repeat"></i> <spring:message code="button.cancle" text="취소" /></button>
 									</div>
 								</div>
 							</div>

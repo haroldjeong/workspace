@@ -84,16 +84,45 @@
 					<div class="panel-body">
 						<table class="table table-detail"><colgroup><col width="150"/><col/></colgroup><tbody>
 						<tr>
+							<th><spring:message code="menu.list.code" text="메뉴 코드"/> *</th>
+							<td data-detail="cd" id="menuCd"></td>
+						</tr>
+						<tr>
+							<th><spring:message code="menu.list.name" text="표기명"/> *</th>
+							<td data-detail="name" id="menuNm"></td>
+							<!--
+							<td>
+								<table class="table table-detail m-n">
+									<colgroup><col width="100"/><col/></colgroup>
+									<tbody>
+									<tr>
+										<th>한국어</th>
+										<td>
+											<i class="fa fa-desktop"></i>&nbsp;name
+										</td>
+									</tr>
+									<tr>
+										<th>영어</th>
+										<td>
+											<i class="fa fa-desktop"></i>&nbsp;name
+										</td>
+									</tr>
+									</tbody>
+								</table>
+							</td>
+							-->
+						</tr>
+						<tr>
 							<th>권한</th>
 							<td>
 								읽기권한
-								<input type="checkbox" class="i-checks" value="Y" name="readYn">
+								<input type="checkbox" class="i-checks" value="Y" name="readYn" id="readYn">
 								쓰기권한
-								<input type="checkbox" class="i-checks" value="Y" name="writeYn">
+								<input type="checkbox" class="i-checks" value="Y" name="writeYn" id="writeYn">
 								다운로드권한
-								<input type="checkbox" class="i-checks" value="Y" name="downYn">
+								<input type="checkbox" class="i-checks" value="Y" name="downYn" id="downYn">
 								삭제권한
-								<input type="checkbox" class="i-checks" value="Y" name="deleteYn">
+								<input type="checkbox" class="i-checks" value="Y" name="deleteYn" id="deleteYn">
 							</td>
 						</tr>
 
@@ -128,6 +157,8 @@
 <script src="/static/js/plugins/jsTree/jstree.min.js" type="text/javascript"></script>
 
 <script type="text/javaScript">
+    var lastSelected;
+
     $(document).ready(function () {
         flow.init(my);
     });
@@ -148,6 +179,24 @@
                 /* Tree Node 선택 */
                 $(_this.selector.tree).off('select_node.jstree').on('select_node.jstree', function(e, data) {
                     $(_this.selector.tree).jstree(true).open_node(data.node.id);
+
+                    var selectedNode;
+                    if (data.selected.length == 1) {
+                        lastSelected = data.selected.slice(0);
+                        selectedNode = data.selected[0];
+                    } else {
+                        // Get the difference between lastselection and current selection
+                        selectedNode = $.grep(data.selected, function(x) {return $.inArray(x, lastSelected) < 0});
+                        lastSelected = data.selected.slice(0); // trick to copy array
+                    }
+                    // Select the parent
+                    var parent = data.instance.get_node(selectedNode).parent;
+                    data.instance.select_node(parent);
+
+                    // TODO 동시 엑션으로 돌아가는걸 바꿔야됨..
+                    _this.bind.action.detail(data.node);
+
+
                 });
 
                 /* Tree Node 검색 */
@@ -183,6 +232,28 @@
                         $.core.loading.stop();
                     }
                 },
+				detail: function (node) {
+					$("#menuCd").text(node.id);
+                    $("#menuNm").text(node.data.menuNm);
+
+                    $(".i-checks").each(function(index, item){
+                        $(item).iCheck("uncheck");
+					});
+
+                    if(node.data.readYn == "Y"){
+                      	$("#readYn").iCheck("check");
+                    }
+                    if(node.data.writeYn == "Y"){
+                        $("#writeYn").iCheck("check");
+                    }
+                    if(node.data.downYn == "Y"){
+                        $("#downYn").iCheck("check");
+                    }
+                    if(node.data.deleteYn == "Y"){
+                        $("#deleteYn").iCheck("check");
+                    }
+
+				},
                 save: function() {
                     if (_this.bind.action.validator() && confirm('저장하시겠습니까?')) {
                         $.core.ajax.post({
@@ -191,6 +262,7 @@
                         }).done(function (result) {
                             if (result) {
                                 alert('저장되었습니다.');
+                                flow.bind.action.list();
                             }
                         });
                     }
@@ -205,6 +277,7 @@
                         }).done(function (result) {
                             if (result) {
                                 alert('삭제되었습니다.');
+                                flow.bind.action.list();
                             }
                         });
                     }
@@ -255,14 +328,35 @@
                 draw: function (menuList) {
                     let data = [];
                     $(menuList).each(function (idx, item) {
+                        var textVal = '';
+                        textVal += item.name;
+                        if(item.readYn == "Y"){
+                            textVal += '<i class="fa fa-file-text-o"></i>';
+						}
+                        if(item.writeYn == "Y"){
+                            textVal += '<i class="fa fa-pencil"></i>';
+                        }
+                        if(item.downYn == "Y"){
+                            textVal += '<i class="fa fa-download"></i>';
+                        }
+                        if(item.deleteYn == "Y"){
+                            textVal += '<i class="fa fa-eraser"></i>';
+                        }
+
                         data.push({
                             'id': item.id
                             , 'parent': (Number(item.depth) === 2 ? '#' : item.parentId)
-                            , 'text': item.name + '<small>&nbsp;(' + item.cd + ')</small>'
+                            , 'text': textVal
                             , 'li_attr': {
                             }
                             , 'data': {
-                                'pathName': item.pathName
+                                'pathName': item.pathName,
+                                'menuNm' : item.name,
+                                'readYn' : item.readYn,
+                                'writeYn' : item.writeYn,
+                                'downYn' : item.downYn,
+                                'deleteYn' : item.deleteYn
+
                             }
                         });
                     });
@@ -285,6 +379,9 @@
                                         return false;
                                     }
                                 }
+                            },
+                            checkbox: {
+                                three_state : true
                             },
                             plugins: ['search', 'types', 'checkbox'],
                             types: {

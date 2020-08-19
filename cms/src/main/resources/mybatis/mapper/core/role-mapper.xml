@@ -145,10 +145,10 @@
 			, #{roleCd}
 			, #{name}
 			, #{useYn}
-			, '5ecf786a-954d-4868-b9f1-250e1747c9bb'::uuid
-			, '127.0.0.1'
+			, #{regId}::uuid
+			, #{regIp}
 			, now()
-			, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'
+			, #{regAgent}
 			, #{roleDesc}
 			, 'N'
 		)
@@ -163,10 +163,10 @@
 			  role_cd = #{roleCd}
 			, name = #{name}
 			, use_yn = #{useYn}
-			, mod_id = '5ecf786a-954d-4868-b9f1-250e1747c9bb'::uuid
-			, mod_ip = '127.0.0.1'
+			, mod_id = #{modId}::uuid
+			, mod_ip = #{modIp}
 			, mod_date = now()
-			, mod_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'
+			, mod_agent = #{modAgent}
 			, role_desc = #{roleDesc}
 		WHERE
 			id = #{id}::uuid
@@ -179,10 +179,10 @@
 		<![CDATA[
 		UPDATE tb_role SET
 			del_yn = 'Y'
-			, mod_id = '5ecf786a-954d-4868-b9f1-250e1747c9bb'::uuid
-			, mod_ip = '127.0.0.1'
+			, mod_id = #{modId}::uuid
+			, mod_ip = #{modIp}
 			, mod_date = now()
-			, mod_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'
+			, mod_agent = #{modAgent}
 		WHERE
 			id = #{id}::uuid
 		]]>
@@ -261,18 +261,21 @@
 			  , regexp_replace(REPLACE(mn.path_name::TEXT, ',', '.'), '[}{"]', '', 'g') AS path_name
 			  , mn.path_seq
 			  , (SELECT COUNT(id) FROM tb_menu a WHERE a.del_yn = 'N' AND mn.id = a.parent_id::TEXT) AS child_cnt
+				]]>
+			  <if test="roleId != null and roleId != ''">
 			  , COALESCE(mrm.read_yn, 'N') AS read_yn
 			  , COALESCE(mrm.write_yn, 'N') AS write_yn
 			  , COALESCE(mrm.down_yn, 'N') AS down_yn
 			  , COALESCE(mrm.delete_yn, 'N') AS delete_yn
-			]]>
+			  </if>
+
 			FROM MENU_LIST AS mn
 			  LEFT OUTER JOIN tb_menu_ml AS ml
 			    ON mn.id = ml.parent_id::TEXT
+			   <if test="roleId != null and roleId != ''">
 			  LEFT OUTER JOIN tb_menu_role_mapp AS mrm
 			    ON mn.id = mrm.menu_id::TEXT
-				<if test="roleId != null and roleId != ''">
-					AND mrm.role_id = #{roleId}::uuid
+				AND mrm.role_id = #{roleId}::uuid
 				</if>
 			WHERE ml.lang_cd = 'ko'
 			/* ORDER BY path_seq */
@@ -309,10 +312,10 @@
 				uuid_generate_v4()
 				,#{menu}::uuid
 				,#{id}::uuid
-				, '5ecf786a-954d-4868-b9f1-250e1747c9bb'::uuid
-				, '127.0.0.1'
+				, #{regId}::uuid
+				, #{regIp}
 				, now()
-				, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'
+				, #{regAgent}
 				, #{readYn}
 				, #{writeYn}
 				, #{deleteYn}

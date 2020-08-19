@@ -93,13 +93,10 @@ public class RoleController extends BaseController {
 	public Role save(@RequestBody Role condition) {
 
 		if (DeepfineUtils.isEmpty(condition.getId())) {
-			condition.initId();
 			roleService.insert(condition);
 		} else {
 			roleService.update(condition);
 		}
-		roleService.insertMenu(condition);
-
 		return condition;
 	}
 

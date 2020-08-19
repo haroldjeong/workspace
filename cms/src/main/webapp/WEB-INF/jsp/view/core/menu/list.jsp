@@ -246,23 +246,23 @@
 								</td>
 							</tr>
 							<tr>
-								<th><spring:message code="menu.list.linkType" text="링크 URL" /></th>
+								<th><spring:message code="menu.list.linkType" text="링크 유형" /></th>
 								<td>
 									<input type="text" class="form-control" name="linkType" value="" title="<spring:message code="menu.list.linkType.title" text="링크 유형을 입력해주세요." />" maxlength="30" autocomplete="off" data-form="linkType" />
 								</td>
 							</tr>
 							<tr>
-								<th><spring:message code="menu.list.iconType" text="링크 URL" /></th>
+								<th><spring:message code="menu.list.iconType" text="아이콘 유형" /></th>
 								<td>
 									<input type="text" class="form-control" name="iconType" value="" title="<spring:message code="menu.list.iconType.title" text="아이콘 유형을 입력해주세요." />" maxlength="30" autocomplete="off" data-form="iconType" />
 								</td>
 							</tr>
 							<tr>
-								<th><spring:message code="menu.list.useYn" text="링크 URL" /> *</th>
+								<th><spring:message code="menu.list.useYn" text="사용여부" /> *</th>
 								<td>
 									<select class="form-control" name="useYn" title="<spring:message code="menu.list.useYn.title" text="사용 여부는 필수 선택 항목입니다." />" data-form="useYn" required="required">
-										<option value="Y">사용</option>
-										<option value="N">미사용</option>
+										<option value="Y"><spring:message code="common.useY" text="사용" /></option>
+										<option value="N"><spring:message code="common.useN" text="미사용" /></option>
 									</select>
 								</td>
 							</tr>
