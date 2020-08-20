@@ -51,7 +51,14 @@
 					</c:choose>
 					<c:choose>
 						<c:when test="${hasParent }">
-							<ul class="nav nav-second-level collapse">
+							<c:choose>
+								<c:when test="${result.depth < 4}">
+									<ul class="nav nav-second-level collapse">
+								</c:when>
+								<c:otherwise>
+									<ul class="nav nav-third-level">
+								</c:otherwise>
+							</c:choose>
 						</c:when>
 						<c:otherwise>
 							</li>
