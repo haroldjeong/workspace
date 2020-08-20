@@ -4,8 +4,10 @@ import com.google.common.base.Splitter;
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 import go.gg.cms.core.domain.User;
 import go.gg.cms.core.domain.UserRole;
+import go.gg.cms.core.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,9 @@ public class SecurityUserService extends EgovAbstractMapper {
 
 	protected Logger logger = LoggerFactory.getLogger(SecurityUserService.class);
 	private final String QUERY_ID_PREFIX = "go.gg.cms.core.security.";
+
+	@Autowired
+	private MenuService menuService;
 
 	/**
 	 * 관리자 정보 조회
@@ -45,6 +50,10 @@ public class SecurityUserService extends EgovAbstractMapper {
 		if (null == user) {
 			throw new UsernameNotFoundException(loginId);
 		}
+
+
+		// todo: 케시 삭제????
+		menuService.evictCache(loginId);
 
 		// todo: 권한(Role) 체계 확정 후 구현 예정 (jm.lee)
 //		List<String> roles = Splitter.on(",").splitToList(user.getAuthorities());

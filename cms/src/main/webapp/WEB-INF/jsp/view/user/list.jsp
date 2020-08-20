@@ -12,7 +12,7 @@
 
 				<div class="ibox ibox-search">
 					<div class="ibox-title">
-						<h5>검색조건</h5>
+						<h5><spring:message code="search.title" text="검색 조건" /></h5>
 						<div class="ibox-tools">
 							<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
 						</div>

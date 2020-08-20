@@ -48,6 +48,10 @@ public class UserController extends BaseController {
 		model.addAttribute("resultList", resultList);
 		model.addAttribute("paginationInfo", paginationInfo);
 		model.addAttribute("groupList", userService.findGroup(condition));
+		//TODO 중복으로 변경??
+		model.addAttribute("roleList", userService.findRole(condition));
+
+
 
 		return VIEW_PATH + "/list.tiles.default";
 	}
@@ -74,6 +78,9 @@ public class UserController extends BaseController {
 	public String form(@ModelAttribute("condition") User condition, Model model) {
 		model.addAttribute("groupList", userService.findGroup(condition));
 		model.addAttribute("result", userService.detail(condition));
+
+		model.addAttribute("roleList", userService.findRole(condition));
+
 		return VIEW_PATH + "/form.tiles.default";
 	}
 

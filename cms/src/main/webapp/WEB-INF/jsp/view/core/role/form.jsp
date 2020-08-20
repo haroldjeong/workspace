@@ -18,7 +18,7 @@
 			<input type="hidden" name="id" id="id" value="<c:out value="${condition.id}"/>"/>
 			<div class="ibox ">
 				<div class="ibox-title">
-					<h5>기본정보</h5>
+					<h5><spring:message code="sample.form.hedertitle" text="기본정보" /></h5>
 					<div class="ibox-tools">
 						<a class="collapse-link">
 							<i class="fa fa-chevron-up"></i>
@@ -27,21 +27,21 @@
 				</div>
 				<div class="ibox-content">
 					<div class="form-group row">
-						<label class="col-sm-3 col-form-label">Role 코드<small class="text-danger"> *</small></label>
+						<label class="col-sm-3 col-form-label"><spring:message code="role.list.roleCd" text="Role 코드"/><small class="text-danger"> *</small></label>
 						<div class="col-sm-9">
-							<input type="text" class="form-control" name="roleCd" value="<c:out value="${result.roleCd}"/>" title="Role 코드는 필수 입력 항목입니다." maxlength="30" autocomplete="off" required="required"/>
+							<input type="text" class="form-control" name="roleCd" value="<c:out value="${result.roleCd}"/>" title="<spring:message code="role.list.roleCd" text="Role 코드"/><spring:message code="common.required" text="은(는) 필수 입력 항목입니다."/>" maxlength="30" autocomplete="off" required="required"/>
 						</div>
 					</div>
 					<div class="hr-line-dashed"></div>
 					<div class="form-group row">
-						<label class="col-sm-3 col-form-label">Role 이름<small class="text-danger"> *</small></label>
+						<label class="col-sm-3 col-form-label"><spring:message code="role.list.name" text="Role 이름"/><small class="text-danger"> *</small></label>
 						<div class="col-sm-9">
-							<input type="text" class="form-control" name="name" value="<c:out value="${result.name}"/>" title="Role 이름은 필수 입력 항목입니다." maxlength="30" autocomplete="off" required="required"/>
+							<input type="text" class="form-control" name="name" value="<c:out value="${result.name}"/>" title="<spring:message code="role.list.name" text="Role 코드"/><spring:message code="common.required" text="은(는) 필수 입력 항목입니다."/>" maxlength="30" autocomplete="off" required="required"/>
 						</div>
 					</div>
 					<div class="hr-line-dashed"></div>
 					<div class="form-group row">
-						<label class="col-sm-3 col-form-label">Role 설명</label>
+						<label class="col-sm-3 col-form-label"><spring:message code="role.list.roleDesc" text="Role 설명"/></label>
 						<div class="col-sm-9">
 							<input type="text" class="form-control" name="roleDesc" value="<c:out value="${result.roleDesc}"/>" maxlength="50" autocomplete="off" />
 						</div>
@@ -49,10 +49,10 @@
 
 					<div class="hr-line-dashed"></div>
 					<div class="form-group row">
-						<label class="col-sm-3 col-form-label">사용 여부<br/></label>
+						<label class="col-sm-3 col-form-label"><spring:message code="role.list.useYn" text="사용 여부"/><br/></label>
 						<div class="col-sm-9">
-							<label><input type="radio" checked="checked" value="Y" name="useYn">사용</label>
-							<label><input type="radio" <c:if test="${result.useYn eq 'N'}">checked="checked"</c:if> value="N" name="useYn">미사용</label>
+							<label><input type="radio" checked="checked" value="Y" name="useYn"><spring:message code="common.useY" text="사용"/></label>
+							<label><input type="radio" <c:if test="${result.useYn eq 'N'}">checked="checked"</c:if> value="N" name="useYn"><spring:message code="common.useN" text="미사용"/></label>
 						</div>
 					</div>
 				</div>
@@ -113,15 +113,15 @@
 							-->
 						</tr>
 						<tr>
-							<th>권한</th>
+							<th><spring:message code="role.form.role" text="권한" arguments=""/></th>
 							<td>
-								읽기권한
+								<spring:message code="role.form.role" text="권한" arguments="읽기"/>
 								<input type="checkbox" class="i-checks" value="Y" name="readYn" id="readYn">
-								쓰기권한
+								<spring:message code="role.form.role" text="권한" arguments="쓰기"/>
 								<input type="checkbox" class="i-checks" value="Y" name="writeYn" id="writeYn">
-								다운로드권한
+								<spring:message code="role.form.role" text="권한" arguments="다운로드"/>
 								<input type="checkbox" class="i-checks" value="Y" name="downYn" id="downYn">
-								삭제권한
+								<spring:message code="role.form.role" text="권한" arguments="삭제"/>
 								<input type="checkbox" class="i-checks" value="Y" name="deleteYn" id="deleteYn">
 							</td>
 						</tr>
@@ -255,20 +255,20 @@
 
 				},
                 save: function() {
-                    if (_this.bind.action.validator() && confirm('저장하시겠습니까?')) {
+                    if (_this.bind.action.validator() && confirm('<spring:message code="menu.list.save.confirm" text="저장하시겠습니까?" javaScriptEscape="true" />')) {
                         $.core.ajax.post({
                             url: 'save.do'
                             , data: JSON.stringify(flow.bind.action.getSaveData())
                         }).done(function (result) {
                             if (result) {
-                                alert('저장되었습니다.');
+                                alert('<spring:message code="menu.list.save.alert" text="저장되었습니다." javaScriptEscape="true" />');
                                 flow.bind.action.list();
                             }
                         });
                     }
                 },
                 remove: function () {
-                    if (confirm('삭제하시겠습니까?')) {
+                    if (confirm('<spring:message code="menu.list.delete.confirm" text="삭제하시겠습니까?" javaScriptEscape="true" />')) {
                         $('input:hidden[name=mode]').val('REMOVE');
 
                         $.core.ajax.post({
@@ -276,7 +276,7 @@
                             , data: JSON.stringify({'id': $('input:hidden[name=id]').val()})
                         }).done(function (result) {
                             if (result) {
-                                alert('삭제되었습니다.');
+                                alert('<spring:message code="menu.list.delete.alert" text="삭제되었습니다." javaScriptEscape="true" />');
                                 flow.bind.action.list();
                             }
                         });

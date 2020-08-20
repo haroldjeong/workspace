@@ -2,14 +2,17 @@ package go.gg.cms.core.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import egovframework.rte.psl.dataaccess.EgovAbstractMapper;
 import go.gg.cms.core.domain.Menu;
 import go.gg.common.util.DeepfineUtils;
 import go.gg.common.util.JsonUtils;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -23,56 +26,79 @@ import java.util.Map;
 public class MenuService extends EgovAbstractMapper {
 
 	private final String QUERY_ID_PREFIX = "go.gg.cms.core.commonMenu.";
+	private String MENU_KEY = "";
 
-	/**
-	 * 전체 메뉴 목록
-	 * @return 계층형 Tree 구조 JSON String
-	 */
-	public String findMenuCacheHierarchy () {
-
-		List<Menu> menuList = super.selectList(QUERY_ID_PREFIX + "findMenuCache");
-
-		// ROOT Menu ID
-		String rootId = menuList.stream().filter(
-				menu -> "ROOT".equals(menu.getCd())&& "".equals(DeepfineUtils.defaultString(menu.getParentId())))
-				.findFirst().get().getId();
-
-		List<Map<String, Object>> resultList = JsonUtils.convertorTreeMap(menuList, rootId, "id", "parentId", "cd", "seq");
-		String result = "";
-
-		try {
-			result = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(resultList);
-		} catch (JsonProcessingException e) {
-			logger.error(e);
-		}
-
-//		logger.debug(result);
-		return result;
-	}
 
 	/**
 	 * 전체 공통메뉴 목록
-	 * @return 2차원 배열 JSON String
+	 * @return 메뉴 리스트
 	 */
-	@Cacheable(cacheNames="menuCache", key="#root.methodName")
-	public String findMenuCache() {
+	@Cacheable(cacheNames="menuCache", key="#loginId")
+	public List<Menu> findMenuCache(String loginId) {
 
 		Menu condition = new Menu();
 		condition.setSearchUseYn("Y");
+		condition.setRegId();
 
-		List<Menu> menuList = super.selectList(QUERY_ID_PREFIX + "findMenuCache", condition);
-		String result = "";
+		MENU_KEY = condition.getRegId();
 
+		List<Menu> menuList = null;
 		try {
-			result = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(menuList);
-		} catch (JsonProcessingException e) {
+			menuList = super.selectList(QUERY_ID_PREFIX + "findMenuCache", condition);
+		} catch (Exception e) {
 			logger.error(e);
 		}
-
-		logger.debug(result);
-		return result;
+		//result = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(menuList);
+		return menuList;
 	}
 
+
+	/**
+	 * 현재 메뉴 정보
+	 * @return 메뉴 상세
+	 */
+	public Menu findCurentMenu(List<Menu> menuList, String url) {
+		Menu returnMenu = null;
+		for (Menu menu : menuList) {
+			if(menu.getLinkUrl().startsWith("/")){
+				if(url.substring(0,url.lastIndexOf("/")).startsWith(menu.getLinkUrl().substring(0,menu.getLinkUrl().lastIndexOf("/")))){
+					returnMenu = menu;
+					break;
+				}
+			}
+		}
+		return returnMenu;
+	}
+
+	/**
+	 * 현재 메뉴 네비게이터 정보
+	 * @return 메뉴 리스트
+	 */
+	public List<Menu> findMenuNavigator(List<Menu> menuList, Menu menu) {
+		Collections.reverse(menuList);
+		List<Menu> navigator = Lists.newArrayList();
+		if(menu != null){
+			navigator.add(menu);
+			for (Menu me : menuList) {
+				if(menu.getParentId().equals(me.getId())){
+					navigator.add(me);
+					menu = me;
+				}
+			}
+		}
+		Collections.reverse(navigator);
+		Collections.reverse(menuList);
+		return navigator;
+	}
+
+	/**
+	 * 메뉴 케시 삭제
+	 * @return void
+	 */
+	@CacheEvict(cacheNames = "menuCache", allEntries = true, key="#loginId")
+	public void evictCache(String loginId) {
+		logger.info("delete cache all");
+	}
 
 
 	/**
@@ -80,7 +106,7 @@ public class MenuService extends EgovAbstractMapper {
 	 * @return 메뉴 목록
 	 */
 	public List<Menu> findAll() {
-		return super.selectList(QUERY_ID_PREFIX + "findMenuCache");
+		return super.selectList(QUERY_ID_PREFIX + "findMenuAll");
 	}
 
 	/**

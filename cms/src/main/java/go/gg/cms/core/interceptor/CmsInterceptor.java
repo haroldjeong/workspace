@@ -1,6 +1,9 @@
 package go.gg.cms.core.interceptor;
 
+import go.gg.cms.core.domain.Menu;
 import go.gg.cms.core.service.CodeService;
+import go.gg.cms.core.service.MenuService;
+import go.gg.cms.core.util.UserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.annotation.Nullable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * CMS 공통 Interceptor
@@ -29,17 +33,30 @@ public class CmsInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	private CodeService codeService;
 
+	@Autowired
+	private MenuService menuService;
+
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		long currentTime = System.currentTimeMillis();
 		logger.info("======================== CmsInterceptor [preHandle][{}] ========================", currentTime);
 		logger.info("Current Profile : {}", ENV_PROFILE);
-
+		System.out.println(request.getRequestURI());
 		request.setAttribute("newLineChar", "\n");
 		request.setAttribute("codeSet", codeService.findCodeCache());
 
-		// todo: controller method body 로직 수행 전 처리로직 구현 (jm.lee)
+		List<Menu> menuSet =  menuService.findMenuCache(UserUtils.getUserInfo().getId());
+		Menu currMenu = menuService.findCurentMenu(menuSet, request.getRequestURI());
+		List<Menu> navigator = menuService.findMenuNavigator(menuSet, currMenu);
 
+		request.setAttribute("menuSet", menuSet);
+		request.setAttribute("currMenu", currMenu);
+		request.setAttribute("menuNavigator", navigator);
+
+
+
+		// todo: controller method body 로직 수행 전 처리로직 구현 (jm.lee)
 		return super.preHandle(request, response, handler);
 	}
 

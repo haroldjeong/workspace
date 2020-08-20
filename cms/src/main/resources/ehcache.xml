@@ -46,4 +46,15 @@
 		diskExpiryThreadIntervalSeconds="120"
 		memoryStoreEvictionPolicy="LRU">
 	</cache>
+
+	<cache name="menuCache"
+		   eternal="false"
+		   timeToIdleSeconds="600"
+		   timeToLiveSeconds="1800"
+		   overflowToDisk="false"
+		   diskPersistent="false"
+		   diskExpiryThreadIntervalSeconds="120"
+		   memoryStoreEvictionPolicy="LRU">
+	</cache>
+
 </ehcache>

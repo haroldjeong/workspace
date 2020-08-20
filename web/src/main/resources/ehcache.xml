@@ -46,4 +46,5 @@
 		diskExpiryThreadIntervalSeconds="120"
 		memoryStoreEvictionPolicy="LRU">
 	</cache>
+
 </ehcache>

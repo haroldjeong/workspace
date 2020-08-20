@@ -44,7 +44,7 @@
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label"><spring:message code="sample.list.title" text="제목" /><small class="text-danger"> *</small></label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" name="name" value="<c:out value="${result.name}"/>" title="제목은 필수 입력 항목입니다." maxlength="30" autocomplete="off" required="required"/>
+								<input type="text" class="form-control" name="name" value="<c:out value="${result.name}"/>" title="<spring:message code="sample.list.title" text="제목" /><spring:message code="common.required" text="은(는) 필수 입력 항목입니다." />" maxlength="30" autocomplete="off" required="required"/>
 							</div>
 						</div>
 						<div class="hr-line-dashed"></div>
@@ -58,7 +58,7 @@
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label"><spring:message code="sample.form.longDesc" text="긴 내용" /><small class="text-danger"> *</small></label>
 							<div class="col-sm-9">
-								<input type="text" class="form-control" name="longDesc" value="<c:out value="${result.longDesc}"/>" title="긴 내용은 필수 입력 항목입니다." autocomplete="off" required="required"/>
+								<input type="text" class="form-control" name="longDesc" value="<c:out value="${result.longDesc}"/>" title="<spring:message code="sample.form.longDesc" text="긴 내용" /><spring:message code="common.required" text="은(는) 필수 입력 항목입니다." />" autocomplete="off" required="required"/>
 							</div>
 						</div>
 						<div class="hr-line-dashed"></div>
@@ -67,7 +67,7 @@
 							<div class="col-sm-9">
 								<div class="input-group date _flow-init-datepicker future">
 									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-									<input type="text" name="testDate" id="testDate" class="form-control" value="<javatime:format value="${result.testDate}" pattern="yyyy-MM-dd" />" title="테스트 일자는 필수 입력 항목입니다." autocomplete="off" required="required" readonly="readonly"/>
+									<input type="text" name="testDate" id="testDate" class="form-control" value="<javatime:format value="${result.testDate}" pattern="yyyy-MM-dd" />" title="<spring:message code="sample.list.testdate" text="테스트 일자" /><spring:message code="common.required" text="은(는) 필수 입력 항목입니다." />" autocomplete="off" required="required" readonly="readonly"/>
 								</div>
 							</div>
 						</div>
@@ -122,7 +122,7 @@
 					$("[required='required']").each(function (i, item) {
 						if ($.trim($(item).val()) === '') {
 							isValid = false;
-							alert($(item).prop('title') || '필수 항목이 누락되었습니다.');
+							alert($(item).prop('title'));
 							$(item).focus();
 							return isValid;
 						}

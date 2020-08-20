@@ -62,6 +62,18 @@
 								</select>
 							</div>
 						</div>
+						<div class="hr-line-dashed"></div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">권한<small class="text-danger"> *</small></label>
+							<div class="col-sm-9">
+								<select class="form-control" name="roleId" title="권한은 필수 선택 항목입니다." autocomplete="off" required="required">
+									<option value="">선택하세요.</option>
+									<c:forEach varStatus="status" items="${roleList}" var="role">
+										<option value="<c:out value="${role.roleId}"/>" <c:if test="${role.roleId eq result.roleId}"> selected="selected"</c:if>><c:out value="${role.roleName}"/></option>
+									</c:forEach>
+								</select>
+							</div>
+						</div>
 					</div>
 				</div>
 

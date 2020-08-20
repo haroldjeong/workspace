@@ -22,7 +22,7 @@
 
 				<div class="ibox ">
 					<div class="ibox-title">
-						<h5>기본정보</h5>
+						<h5><spring:message code="sample.form.hedertitle" text="기본정보" /></h5>
 						<div class="ibox-tools">
 							<a class="collapse-link">
 								<i class="fa fa-chevron-up"></i>
@@ -62,7 +62,7 @@
 
 				<div class="ibox ">
 					<div class="ibox-title">
-						<h5>등록정보</h5>
+						<h5><spring:message code="sample.form.saveinfo" text="등록정보" /></h5>
 						<div class="ibox-tools">
 							<a class="collapse-link">
 								<i class="fa fa-chevron-up"></i>

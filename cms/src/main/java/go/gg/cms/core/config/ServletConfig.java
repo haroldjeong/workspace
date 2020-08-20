@@ -211,5 +211,7 @@ public class ServletConfig extends WebMvcConfigurationSupport {
 			, "/robots", "/robot", "/robot.txt", "/robots.txt", "/null"
 			, "/WEB-INF/**"
 			, "/common/file/stream/**"
+			, "/login.do"
+			, "/dcms/login.do"
 	};
 }

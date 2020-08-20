@@ -35,6 +35,12 @@ public class UserService extends BaseService<User, String> {
 		return super.find(QUERY_ID_PREFIX, "GroupList", condition);
 	}
 
+	public List<User> findRole(User condition) {
+		return super.find(QUERY_ID_PREFIX, "RoleList", condition);
+	}
+
+
+
 	@Transactional
 	public int insert(User condition) {
 		return super.insert(QUERY_ID_PREFIX, "Insert", condition);
@@ -42,6 +48,11 @@ public class UserService extends BaseService<User, String> {
 
 	@Transactional
 	public int updateUser(User condition) {
+		condition.setRegId();
+		condition.setRegIp();
+		condition.setRegAgent();
+		super.delete(QUERY_ID_PREFIX , "UserRole", condition);
+		super.insert(QUERY_ID_PREFIX , "UserRole", condition);
 		return super.update(QUERY_ID_PREFIX, "User", condition);
 	}
 

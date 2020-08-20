@@ -330,14 +330,14 @@
 
 					if (parentId === "#" && _isFirst) {
 						_isFirst = false;
-						alert('최상위 메뉴는 이동할 수 없습니다.');
+                        alert('<spring:message code="menu.list.nouptop" text="최상위 메뉴는 이동할 수 없습니다." javaScriptEscape="true" />');
 						$(_this.selector.tree).jstree(true).refresh();
 						return false;
 					}
 
 					if (_isFirst) {
 						_isFirst = false;
-						if (confirm('변경 내용을 저장하시겠습니까?\n변경 내용에 따라 다소 시간이 소요될 수 있습니다.')) {
+                        if (confirm('<spring:message code="menu.list.move.confirm" text="변경 내용을 저장하시겠습니까? \n변경 내용에 따라 다소 시간이 소요될 수 있습니다." javaScriptEscape="true" />')) {
 							let newData = $(_this.selector.tree).data().jstree.get_json(parentId, {flat: true});
 
 							newData = newData.filter(function (data) {
@@ -387,13 +387,13 @@
 					});
 				},
 				save: function () {
-					if (_this.bind.action.validator() && confirm('저장하시겠습니까?')) {
+                    if (_this.bind.action.validator() && confirm('<spring:message code="menu.list.save.confirm" text="저장하시겠습니까?" javaScriptEscape="true" />')) {
 						$.core.ajax.post({
 							url: $('input:hidden[name=mode]').val().toLowerCase() + '.do'
 							, data: JSON.stringify(flow.prototype.getSaveData())
 						}).done(function (result) {
 							if (result) {
-								alert('저장되었습니다.');
+                                alert('<spring:message code="menu.list.save.alert" text="저장되었습니다." javaScriptEscape="true" />');
 								_this.bind.action.findAll();
 							}
 						});
@@ -404,7 +404,7 @@
 					$("[required='required']").each(function (i, item) {
 						if ($.trim($(item).val()) === '') {
 							isValid = false;
-							alert($(item).prop('title') || '필수 항목이 누락되었습니다.');
+							alert($(item).prop('title'));
 							$(item).focus();
 							return isValid;
 						}
@@ -413,8 +413,7 @@
 					$("input:text[name=cd]").each(function (i, item) {
 						if($(item).val().indexOf(' ') > -1) {
 							isValid = false;
-
-							alert('코드에는 공백을 포함할 수 없습니다.');
+                            alert('<spring:message code="menu.list.cd.alert_1" text="코드에는 공백을 포함할 수 없습니다." javaScriptEscape="true" />');
 							$(item).focus();
 							return isValid;
 						}
@@ -423,7 +422,7 @@
 					$("input:text[name=cd], input:text[name=name]").each(function (i, item) {
 						if($(item).val().indexOf('\.') > -1 || $(item).val().indexOf(',') > -1) {
 							isValid = false;
-							alert('코드와 표기명에는 마침표(.)와 쉼표(,)를 사용할 수 없습니다.');
+                            alert('<spring:message code="menu.list.cd.alert_2" text="코드와 표기명에는 마침표(.)와 쉼표(,)를 사용할 수 없습니다." javaScriptEscape="true" />');
 							$(item).focus();
 							return isValid;
 						}
@@ -436,13 +435,13 @@
 						, data: JSON.stringify(data)
 					}).done(function (result) {
 						if (result) {
-							alert('저장되었습니다.');
+                            alert('<spring:message code="menu.list.save.alert" text="저장되었습니다." javaScriptEscape="true" />');
 							_this.bind.action.findAll();
 						}
 					});
 				},
 				remove: function () {
-					if (confirm('삭제하시겠습니까?')) {
+                    if (confirm('<spring:message code="menu.list.delete.confirm" text="삭제하시겠습니까?" javaScriptEscape="true" />')) {
 						$('input:hidden[name=mode]').val('REMOVE');
 
 						$.core.ajax.post({
@@ -450,7 +449,7 @@
 							, data: JSON.stringify({'id': $('input:hidden[name=id]').val()})
 						}).done(function (result) {
 							if (result) {
-								alert('삭제되었습니다.');
+                                alert('<spring:message code="menu.list.delete.alert" text="삭제되었습니다." javaScriptEscape="true" />');
 								_this.bind.action.findAll();
 							}
 						});

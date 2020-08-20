@@ -139,8 +139,8 @@
 										<td class="text-center"><javatime:format value="${result.modDate}" style="MS" /></td>
 										<td><c:out value="${result.modId}"/></td>
 										<td class="text-center">
-											<button type="button" class="_flow-action-detail btn btn-white btn-sm" data-id="${result.id}" title="보기"><i class="fa fa-search"></i> </button>
-											<button type="button" class="_flow-action-form btn btn-white btn-sm" data-id="${result.id}" title="수정"><i class="fa fa-wrench"></i></button>
+											<button type="button" class="_flow-action-detail btn btn-white btn-sm" data-id="${result.id}" title="<spring:message code="button.view" text="보기"/>"><i class="fa fa-search"></i> </button>
+											<button type="button" class="_flow-action-form btn btn-white btn-sm" data-id="${result.id}" title="<spring:message code="button.modified" text="수정"/>"><i class="fa fa-wrench"></i></button>
 										</td>
 									</tr>
 								</c:forEach>
@@ -151,7 +151,7 @@
 					<div class="row" style="margin-top:5px;">
 						<div class="col-lg-4">
 							<div class="btn-group">
-								<button type="button" class="btn btn-white btn-sm _flow-action-form" title="등록"><i class="fa fa-pencil-square"></i><spring:message code="button.create" text="등록"/></button>
+								<button type="button" class="btn btn-white btn-sm _flow-action-form" title="<spring:message code="button.create" text="등록"/>"><i class="fa fa-pencil-square"></i><spring:message code="button.create" text="등록"/></button>
 							</div>
 						</div>
 						<div class="col-lg-8">

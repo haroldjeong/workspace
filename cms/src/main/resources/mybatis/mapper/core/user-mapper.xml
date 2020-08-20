@@ -112,10 +112,15 @@
 			, u_group.id AS group_id
 			, u_group.group_name AS group_name
 			, getFilePath(u_id.profile_file_id) AS profile_photo
+
+			, u_group_role_mapp.role_id AS role_id
 		FROM
 			tb_user as u_id
 		LEFT OUTER JOIN tb_user_group as u_group
 		ON u_id.group_id = u_group.id
+
+		LEFT OUTER JOIN tb_user_group_role_mapp as u_group_role_mapp
+		ON u_id.id = u_group_role_mapp.mapp_id AND u_group_role_mapp.type = 'U'
 		]]>
 		<where>
 			u_id.status <![CDATA[<>]]> 'REMOVED'
@@ -139,6 +144,23 @@
 		ORDER BY u_group.disp_seq ASC
 		]]>
 	</select>
+
+	<!-- 관리자 권한 목록 조회 -->
+	<select id="findRoleList" parameterType="CmsUser" resultType="CmsUser">
+		/* SQL_ID : go.gg.cms.apps.user.findRoleList */
+		<![CDATA[
+		SELECT
+			u_role.id AS role_id
+			, u_role.name AS role_name
+		FROM
+			tb_role as u_role
+		WHERE
+			u_role.del_yn = 'N'
+			AND u_role.use_yn = 'Y'
+		ORDER BY u_role.reg_date DESC
+		]]>
+	</select>
+
 
 	<!-- 관리자 정보 수정 -->
 	<update id="updateUser" parameterType="CmsUser">
@@ -164,4 +186,38 @@
 		WHERE id = #{id}::uuid
 		]]>
 	</update>
+
+	<!-- 정보 입력 (유저 메뉴 Role) 임시 -->
+	<insert id="insertUserRole" parameterType="CmsUser">
+		/* SQL_ID : go.gg.cms.apps.user.insertUserRole */
+		INSERT INTO tb_user_group_role_mapp (
+			id
+			, mapp_id
+			, role_id
+			, type
+			, reg_id
+			, reg_ip
+			, reg_date
+			, reg_agent
+		) VALUES (
+			uuid_generate_v4()
+			, #{id}::uuid
+			, #{roleId}::uuid
+			, 'U'
+			, #{regId}::uuid
+			, #{regIp}
+			, now()
+			, #{regAgent}
+		)
+	</insert>
+
+	<!-- 유저 메뉴 Role 정보 삭제 임시-->
+	<delete id="deleteUserRole" parameterType="CmsUser">
+		/* SQL_ID : go.gg.cms.apps.user.deleteUserRole */
+		<![CDATA[
+		DELETE FROM tb_user_group_role_mapp
+		WHERE mapp_id = #{id}::uuid
+		AND type = 'U'
+		]]>
+	</delete>
 </mapper>

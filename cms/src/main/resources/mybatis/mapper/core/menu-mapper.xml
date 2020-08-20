@@ -7,7 +7,7 @@
 -->
 <mapper namespace="go.gg.cms.core.commonMenu">
 
-	<!-- 공통메뉴 전체목록 조회 -->
+	<!-- 공통메뉴 전체목록 개인 메뉴용 조회 -->
 	<select id="findMenuCache" parameterType="CommonMenu" resultType="CommonMenu">
 		/* SQL_ID : go.gg.cms.core.commonMenu.findMenuCache */
 		<![CDATA[
@@ -55,9 +55,98 @@
 			    INNER JOIN MENU_LIST AS b
 			    ON a.parent_id::TEXT = b.id
 			        AND a.del_yn = 'N'
+			        AND a.use_yn = 'Y'
+			        AND ml.lang_cd = 'ko'
+			        AND NOT CYCLE
+			)
+			SELECT mn.id
+			  , mn.disp_cd AS cd
+			  , mn.parent_id
+			  , ml.name
+			  , ml.short_desc AS shrt_desc
+			  , ml.long_desc AS long_desc
+			  , mn.disp_seq AS seq
+			  , mn.use_yn
+			  , mn.depth
+			  , mn.link_url
+			  , mn.link_type
+			  , mn.icon_type
+			  , regexp_replace(REPLACE(mn.path_id::TEXT, ',', '.'), '[}{"]', '', 'g') AS path_id
+			  , regexp_replace(REPLACE(mn.path_cd::TEXT, ',', '.'), '[}{"]', '', 'g') AS path_cd
+			  , regexp_replace(REPLACE(mn.path_name::TEXT, ',', '.'), '[}{"]', '', 'g') AS path_name
+			  , mn.path_seq
+			  , (SELECT COUNT(id) FROM tb_menu a WHERE a.del_yn = 'N' AND mn.id = a.parent_id::TEXT) AS child_cnt
+			FROM MENU_LIST AS mn
+		  	  LEFT OUTER JOIN tb_menu_ml AS ml
+			    ON mn.id = ml.parent_id::TEXT
+
+			WHERE ml.lang_cd = 'ko'
+			AND mn.id IN
+			(
+				SELECT menu_id::TEXT FROM tb_menu_role_mapp
+				WHERE role_id in (
+					SELECT role_id FROM tb_user_group_role_mapp
+					WHERE mapp_id = #{regId}::UUID
+				)
+			)
+			ORDER BY path_seq
+			/* ORDER BY seq */
+		]]>
+	</select>
+
+
+
+	<!-- 공통메뉴 전체목록 조회 -->
+	<select id="findMenuAll" parameterType="CommonMenu" resultType="CommonMenu">
+		/* SQL_ID : go.gg.cms.core.commonMenu.findMenuAll */
+		<![CDATA[
+			WITH RECURSIVE MENU_LIST (id, disp_cd, parent_id, disp_seq, link_url, link_type, icon_type, use_yn, depth, path_id, path_cd, path_name, path_seq, cycle) AS
+			(
+			  SELECT a.id::TEXT
+			    , a.disp_cd::TEXT
+			    , a.parent_id::TEXT
+			    , a.disp_seq
+			    , a.link_url
+			    , a.link_type
+			    , a.icon_type
+			    , a.use_yn
+			    , 1 AS depth
+			    , ARRAY[a.id::TEXT]
+			    , ARRAY[a.disp_cd::TEXT]
+			    , ARRAY['ROOT'::TEXT]
+			    , ARRAY[a.disp_seq::TEXT]
+			    , false
+			    , false
+			    , false
+			  FROM tb_menu a
+			  WHERE a.disp_cd = 'ROOT'
+			        AND a.parent_id IS NULL
+			  UNION ALL
+			  SELECT a.id::TEXT
+			    , a.disp_cd::TEXT
+			    , a.parent_id::TEXT
+			    , a.disp_seq
+			    , a.link_url
+			    , a.link_type
+			    , a.icon_type
+			    , a.use_yn
+			    , b.depth + 1
+			    , ARRAY_APPEND(b.path_id, a.id::TEXT)
+			    , ARRAY_APPEND(b.path_cd, a.disp_cd::TEXT)
+			    , ARRAY_APPEND(b.path_name, ml.name::TEXT)
+			    , ARRAY_APPEND(b.path_seq, a.disp_seq::TEXT)
+			    , a.id::TEXT = ANY(b.path_id)
+			    , a.disp_cd::TEXT = ANY(b.path_cd)
+			    , a.disp_seq::TEXT = ANY(b.path_seq)
+			  FROM tb_menu AS a
+			    INNER JOIN tb_menu_ml AS ml
+			    ON a.id = ml.parent_id
+			    INNER JOIN MENU_LIST AS b
+			    ON a.parent_id::TEXT = b.id
+			        AND a.del_yn = 'N'
 		]]>
 		<if test="searchUseYn != null and searchUseYn != ''">
-			        AND a.use_yn = 'Y'
+			AND a.use_yn = 'Y'
 		</if>
 		<![CDATA[
 			        AND ml.lang_cd = 'ko'
@@ -84,8 +173,8 @@
 			  LEFT OUTER JOIN tb_menu_ml AS ml
 			    ON mn.id = ml.parent_id::TEXT
 			WHERE ml.lang_cd = 'ko'
-			/* ORDER BY path_seq */
-			ORDER BY seq
+			ORDER BY path_seq
+			/* ORDER BY seq */
 		]]>
 	</select>
 
