@@ -14,6 +14,7 @@
 <nav class="navbar-default navbar-static-side">
 	<div class="sidebar-collapse">
 		<ul class="nav metismenu" id="side-menu">
+			<input type="hidden" id="currMenu" value="<c:out value="${currMenu.id}" />" />
 			<li class="nav-header">
 				<div class="dropdown profile-element">
 					<img alt="image" class="rounded-circle" src="/static/img/profile_small.jpg"/>
@@ -39,14 +40,15 @@
 				<c:if test="${result.depth > 2}">
 					<c:set var="hasParent" value="${result.depth < menuSet[status.count].depth}"/>
 					<c:set var="isEnd" value="${result.depth > menuSet[status.count].depth}"/>
+					<c:set var="isSelected" value="${fn:indexOf(currMenu.pathId, result.id) > -1}"/>
 					<c:choose>
 						<c:when test="${hasParent}">
-							<li>
-							<a href="${result.linkUrl}" value="${result.id}"><i class="fa fa-sitemap"></i> <span class="nav-label">${menuSet[status.index].name }</span><span class="fa arrow"></span></a>
+							<li<c:if test="${isSelected}"> class="active"</c:if>>
+							<a href="${result.linkUrl}" value="${result.id}"<c:if test="${isSelected}"> aria-expanded="true"</c:if>><i class="fa fa-sitemap"></i> <span class="nav-label">${menuSet[status.index].name }</span><span class="fa arrow"></span></a>
 						</c:when>
 						<c:otherwise>
-							<li>
-							<a href="${result.linkUrl}">${menuSet[status.index].name }</a>
+							<li<c:if test="${isSelected}"> class="active"</c:if>>
+							<a href="${result.linkUrl}" value="${result.id}">${menuSet[status.index].name }</a>
 						</c:otherwise>
 					</c:choose>
 					<c:choose>
