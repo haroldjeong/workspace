@@ -42,7 +42,7 @@ public class MainController extends BaseController {
 	@RequestMapping("jwtTest.do")
 	public String jwtTest() {
 		String token = JwtUtils.createToken();
-		String redirectUri = "http://web.fine.ai:3000/login/" + token;
+		String redirectUri = "https://127.0.0.1:444/login/" + token;
 
 		return "redirect:" + redirectUri;
 	}
