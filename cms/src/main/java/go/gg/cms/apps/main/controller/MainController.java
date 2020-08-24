@@ -6,6 +6,7 @@ import go.gg.cms.core.util.JwtUtils;
 import go.gg.cms.domain.Main;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -27,9 +28,6 @@ public class MainController extends BaseController {
 	@Value("${site.domain.front}")
 	private String frontDomain;
 
-	@Value("${jwt.key}")
-	private String ENC_KEY;
-
 	/**
 	 * 메인화면
 	 * @param main 도메인
@@ -44,7 +42,6 @@ public class MainController extends BaseController {
 	//TODO: jwt 로그인 임시 버튼. 추후 삭제 예정
 	@RequestMapping("jwtTest.do")
 	public String jwtTest() {
-		JwtUtils.setEncKey(ENC_KEY);
 		String token = JwtUtils.createToken();
 		String redirectUri = "https://127.0.0.1:444/login/" + token;
 

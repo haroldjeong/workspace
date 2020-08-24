@@ -22,9 +22,10 @@ import java.util.Map;
 public class JwtUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
 
-    private static String ENC_KEY = "";
+    private static String ENC_KEY;
 
-    public static void setEncKey (String key) {
+    @Value("${jwt.key}")
+    public void setEncKey (String key) {
         ENC_KEY = key;
     }
 
@@ -62,7 +63,7 @@ public class JwtUtils {
     private static byte[] generateKey() {
         byte[] key = null;
         try {
-            key = JwtUtils.ENC_KEY.getBytes("UTF-8");
+            key = ENC_KEY.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e){
             LOGGER.error("JwtService generateKey Error :: " + e);
         }
