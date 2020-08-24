@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+	file-mapper.xml
+	@author jb.choi (DEEP.FINE)
+
+	// Guide
+	[jdbcType]
+		BIT
+		FLOAT
+		CHAR
+		TIMESTAMP
+		OTHER
+		UNDEFINED
+		TINYINT
+		REAL
+		VARCHAR
+		BINARY
+		BLOB
+		NVARCHAR
+		SMALLINT
+		DOUBLE
+		LONGVARCHAR
+		VARBINARY
+		CLOB
+		NCHAR
+		INTEGER
+		NUMERIC
+		DATE
+		LONGVARBINARY
+		BOOLEAN
+		NCLOB
+		BIGINT
+		DECIMAL
+		TIME
+		NULL
+		CURSOR
+-->
+<mapper namespace="go.gg.cms.core.file">
+
+	<!-- 마스터 파일 추가 -->
+	<insert id="insertMasterFile" parameterType="DetailFile">
+		/* SQL_ID : go.gg.cms.core.file.insertMasterFile */
+		<![CDATA[
+		INSERT INTO tb_file (
+			id
+			, group_id
+			, file_group_cd
+			, del_yn
+			, reg_id
+			, reg_ip
+			, reg_date
+			, reg_agent
+		) VALUES (
+			#{id}::uuid
+			, #{groupId}::uuid
+			, #{fileGroupCd}::uuid
+			, 'N'
+			, #{regId}::uuid
+			, #{regIp}
+			, now()
+			, #{regAgent}
+		)
+		]]>
+	</insert>
+
+	<!-- 파일 상세 정보 추가 -->
+	<insert id="insertDetailFile" parameterType="DetailFile">
+		/* SQL_ID : go.gg.cms.core.file.insertDetailFile */
+		<![CDATA[
+		INSERT INTO tb_file_dtl (
+			id
+			, parent_id
+			, file_seq
+			, original_name
+			, mimetype
+			, file_name
+			, destination
+			, path
+			, size
+			, del_yn
+		) VALUES (
+			#{id}::uuid
+			, #{parentId}::uuid
+			, #{fileSeq}
+			, #{originalName}
+			, #{mimetype}
+			, #{fileName}
+			, #{destination}
+			, #{path}
+			, #{size}
+			, 'Y'
+		)
+		]]>
+	</insert>
+
+	<!--&lt;!&ndash; 파일 아이디로 파일 상세 정보 조회 &ndash;&gt;TODO::필요없을 시 제거 (jb.choi)-->
+	<!--<select id="findFileById" resultType="DetailFile">-->
+		<!--/* SQL_ID : go.gg.cms.core.file.findFileById */-->
+		<!--<![CDATA[-->
+		<!--SELECT *-->
+		<!--FROM-->
+			<!--tb_file_dtl-->
+		<!--WHERE-->
+			<!--del_yn = 'N'-->
+		<!--AND-->
+			<!--id = #{id}::uuid-->
+		<!--]]>-->
+	<!--</select>-->
+
+	<!-- 마스터 파일 아이디로 파일 상세 정보 조회 -->
+	<select id="findFileByParentId" resultType="DetailFile">
+		/* SQL_ID : go.gg.cms.core.file.findFileByParentId */
+		<![CDATA[
+		SELECT *
+		FROM
+			tb_file_dtl
+		WHERE
+			del_yn = 'N'
+		AND
+			parent_id = #{parentId}::uuid
+		]]>
+	</select>
+
+	<!-- 마스터 파일 아이디로 파일 상세 정보 리스트 조회 -->
+	<select id="findFileListByParentId" resultType="DetailFile">
+		/* SQL_ID : go.gg.cms.core.file.findFileListByParentId */
+		<![CDATA[
+		SELECT *
+		FROM
+			tb_file_dtl
+		WHERE
+			del_yn = 'N'
+		AND
+			parent_id = #{parentId}::uuid
+		]]>
+	</select>
+
+	<!-- 업로드된 파일의 마지막 번호 조회 -->
+	<select id="findCurrentFileSequence" resultType="int">
+		/* SQL_ID : go.gg.cms.core.file.findCurrentFileSequence */
+		<![CDATA[
+		SELECT
+			file_seq
+		FROM
+			tb_file_dtl
+		WHERE
+			parent_id = #{selectedFileId}::uuid
+		]]>
+		ORDER BY
+			file_seq DESC
+		LIMIT 1
+	</select>
+
+	<!-- 업로드된 파일 모두 제거 설정 -->
+	<update id="deleteAllFileByParentId">
+		/* SQL_ID : go.gg.cms.core.file.deleteAllFileByParentId */
+		<![CDATA[
+		UPDATE
+			tb_file_dtl
+		SET
+			del_yn = 'Y'
+		WHERE
+			parent_id = #{parentId}::uuid
+		]]>
+	</update>
+
+	<!-- 파일 삭제 여부 상태 변경 (Y -> N) -->
+	<update id="updateUploadFileState">
+		/* SQL_ID : go.gg.cms.core.file.updateUploadFileState */
+		<![CDATA[
+		UPDATE
+			tb_file_dtl
+		SET
+			del_yn = 'N'
+		WHERE
+			id = #{uploadedFile}::uuid
+		]]>
+	</update>
+
+	<!-- 파일 리스트 삭제 여부 상태 변경 (Y -> N) -->
+	<update id="updateUploadFileListState">
+		/* SQL_ID : go.gg.cms.core.file.updateUploadFileListState */
+		<![CDATA[
+		UPDATE
+			tb_file_dtl
+		SET
+			del_yn = 'N'
+		WHERE
+			id
+		IN
+		]]>
+		<foreach item="item" collection="list" open="(" close=")" separator=",">
+			#{item}::uuid
+		</foreach>
+	</update>
+
+</mapper>

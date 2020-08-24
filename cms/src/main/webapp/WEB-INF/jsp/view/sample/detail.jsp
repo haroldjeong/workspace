@@ -57,6 +57,38 @@
 								<p class="form-control-static"><c:out value="${result.longDesc}"/></p>
 							</div>
 						</div>
+						<div class="hr-line-dashed"></div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">첨부파일</label>
+							<div class="col-sm-9">
+								<c:if test="${!empty uploadedFile}">
+									<a href="/upload/${uploadedFile.fileName}" download="${uploadedFile.originalName}"><c:out value="${uploadedFile.originalName}"/></a><br/>
+									<%--TODO::다운로드 시 아이콘 출력 필요 (jb.choi) --%>
+									<%--<a href="#" onclick="downloadFile('${uploadedFile.id}')" target="_blank"><c:out value="${uploadedFile.originalName}"/></a>TODO::필요없을 시 제거 (jb.choi)--%>
+								</c:if>
+							</div>
+						</div>
+						<div class="hr-line-dashed"></div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">첨부파일</label>
+							<div class="col-sm-9">
+								<c:forEach var="uploadedFileList" items="${uploadedFileList}">
+									<a href="/upload/${uploadedFileList.fileName}" download="${uploadedFileList.originalName}"><c:out value="${uploadedFileList.originalName}"/></a><br/>
+									<%--TODO::다운로드 시 아이콘 출력 필요 (jb.choi) --%>
+									<%--<a href="#" onclick="downloadFile('${uploadedFileList.id}')" target="_blank"><c:out value="${uploadedFileList.originalName}"/></a><br/>TODO::필요없을 시 제거 (jb.choi)--%>
+								</c:forEach>
+							</div>
+						</div>
+						<div class="hr-line-dashed"></div>
+						<div class="form-group row">
+							<label class="col-sm-3 col-form-label">첨부파일</label>
+							<div class="col-sm-9">
+								<c:forEach var="uploadedFileList2" items="${uploadedFileList2}">
+									<a href="/upload/${uploadedFileList2.fileName}" download="${uploadedFileList2.originalName}"><c:out value="${uploadedFileList2.originalName}"/></a><br/>
+									<%--TODO::다운로드 시 아이콘 출력 필요 (jb.choi) --%>
+								</c:forEach>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -124,5 +156,78 @@
 	$(document).ready(function () {
 		flow.init();
 	});
+
+    /**
+     * 썸네일 생성
+     * @param uploadedFile 업로드된 파일
+     * @return 썸네일
+     */
+    function createThumbnail(uploadedFile) {
+        const img = document.createElement("img");
+        const reader = new FileReader();
+
+        reader.readAsDataURL(uploadedFile);
+        reader.addEventListener("load", function () {
+            img.src = reader.result;
+            img.alt = uploadedFile.name;
+            img.width = 50;
+            img.height = 50;
+        }, false);
+
+        return img;
+    }
+
+    /**
+     * 파일 아이콘 가져오기
+     * @param uploadedFile 업로드된 파일
+     * @return 파일 아이콘
+     */
+    function getFileIcon(uploadedFile) {
+        const img = document.createElement("img");
+        let mimeTypeImg;
+
+        switch (uploadedFile.type) {
+            case "application/pdf": mimeTypeImg = "icon_pdf.png"; break;
+            case "application/haansofthwp": mimeTypeImg = "icon_hwp.png"; break;
+            case "application/msword":
+            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document": mimeTypeImg = "icon_docx.png"; break;
+            case "application/vnd.ms-powerpoint":
+            case "application/vnd.openxmlformats-officedocument.presentationml.presentation": mimeTypeImg = "icon_pptx.png"; break;
+            case "application/vnd.ms-excel":
+            case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": mimeTypeImg = "icon_xlsx.png"; break;
+            default: mimeTypeImg = "icon_file.png";
+        }
+
+        img.src = "/static/img/upload/" + mimeTypeImg;
+        img.alt = uploadedFile.name;
+        img.width = 50;
+        img.height = 50;
+
+        return img;
+    }
+
+    <%--function downloadFile(id) {TODO::필요없을 시 제거 (jb.choi)--%>
+        <%--$.ajax({--%>
+            <%--url: "<c:url value='/file/download.do'/>",--%>
+			<%--data: {--%>
+                <%--id: id--%>
+			<%--},--%>
+			<%--success: function(data) {--%>
+				<%--console.log(data);--%>
+			<%--},--%>
+            <%--error: function(error, xhr) {--%>
+                <%--console.log(error);--%>
+                <%--console.log(xhr);--%>
+                <%--alert("파일 다운로드에 실패했습니다. 다시 시도해 주세요.");--%>
+            <%--}--%>
+        <%--});--%>
+    <%--}--%>
+    <%--/**--%>
+	 <%--* 파일 다운로드--%>
+     <%--* @param id 파일의 아이디--%>
+     <%--*/--%>
+	<%--function downloadFile(id) {--%>
+        <%--window.open("<c:url value='/file/download.do?id='/>" + id);--%>
+	<%--}--%>
 </script>
 

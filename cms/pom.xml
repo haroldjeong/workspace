@@ -48,6 +48,20 @@
             <version>1.13.15.RELEASE</version>
         </dependency>
 
+        <!-- 파일 업로드 라이브러리 (jb.choi) -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.3</version>
+        </dependency>
+
+        <!-- 파일 업로드 종속 라이브러리 (jb.choi) -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
+        </dependency>
+
         <!--↑↑↑↑↑↑↑ 필요 Library 추가 (반드시 추가자 명시!!!) End ↑↑↑↑↑↑↑-->
     </dependencies>
 </project>

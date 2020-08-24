@@ -85,6 +85,8 @@
 				sample.id AS id
 				, sample.category_cd AS category_cd
 				, sample.file_id AS file_id
+				, sample.file_id2 AS file_id2
+				, sample.file_id3 AS file_id3
 				, sample.disp_seq AS disp_seq
 				, sample.reg_id AS reg_id
 				, sample.reg_ip AS reg_ip
@@ -132,6 +134,8 @@
 				sample.id AS id
 				, sample.category_cd AS category_cd
 				, sample.file_id AS file_id
+				, sample.file_id2 AS file_id2
+				, sample.file_id3 AS file_id3
 				, sample.disp_seq AS disp_seq
 				, sample.reg_id AS reg_id
 				, sample.reg_ip AS reg_ip
@@ -162,6 +166,8 @@
 			id
 			, category_cd
 			, file_id
+			, file_id2
+			, file_id3
 			, disp_seq
 			, del_yn
 			, test_date
@@ -173,6 +179,8 @@
 			#{id}::uuid
 			, #{categoryCd}::uuid
 			, #{fileId}::uuid
+			, #{fileId2}::uuid
+			, #{fileId3}::uuid
 			, #{dispSeq, jdbcType=INTEGER}
 			, 'N'
 			, #{testDate}
@@ -213,6 +221,8 @@
 		UPDATE tb_sample SET
 			category_cd = #{categoryCd}::uuid
 			, file_id = #{fileId}::uuid
+			, file_id2 = #{fileId2}::uuid
+			, file_id3 = #{fileId3}::uuid
 			, test_date = #{testDate}
 			, mod_id = '5ecf786a-954d-4868-b9f1-250e1747c9bb'::uuid
 			, mod_ip = '127.0.0.1'
