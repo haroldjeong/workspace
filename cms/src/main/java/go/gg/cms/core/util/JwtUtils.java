@@ -22,7 +22,11 @@ import java.util.Map;
 public class JwtUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(JwtUtils.class);
 
-    public static String ENC_KEY = "69cec889bb1ca8162a5ee6ef2c91f718";
+    private static String ENC_KEY = "";
+
+    public static void setEncKey (String key) {
+        ENC_KEY = key;
+    }
 
     public static String createToken() {
         String jwt = "";

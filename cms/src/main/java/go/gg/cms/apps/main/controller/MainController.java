@@ -27,6 +27,9 @@ public class MainController extends BaseController {
 	@Value("${site.domain.front}")
 	private String frontDomain;
 
+	@Value("${jwt.key}")
+	private String ENC_KEY;
+
 	/**
 	 * 메인화면
 	 * @param main 도메인
@@ -41,6 +44,7 @@ public class MainController extends BaseController {
 	//TODO: jwt 로그인 임시 버튼. 추후 삭제 예정
 	@RequestMapping("jwtTest.do")
 	public String jwtTest() {
+		JwtUtils.setEncKey(ENC_KEY);
 		String token = JwtUtils.createToken();
 		String redirectUri = "http://web.fine.ai:3000/login/" + token;
 
