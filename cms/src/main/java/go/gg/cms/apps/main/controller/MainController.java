@@ -2,6 +2,7 @@ package go.gg.cms.apps.main.controller;
 
 import go.gg.cms.apps.main.service.MainService;
 import go.gg.cms.core.controller.BaseController;
+import go.gg.cms.core.util.JwtUtils;
 import go.gg.cms.domain.Main;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,4 +38,12 @@ public class MainController extends BaseController {
 		return "main.tiles.main";
 	}
 
+	//TODO: jwt 로그인 임시 버튼. 추후 삭제 예정
+	@RequestMapping("jwtTest.do")
+	public String jwtTest() {
+		String token = JwtUtils.createToken();
+		String redirectUri = "http://web.fine.ai:3000/login/" + token;
+
+		return "redirect:" + redirectUri;
+	}
 }
