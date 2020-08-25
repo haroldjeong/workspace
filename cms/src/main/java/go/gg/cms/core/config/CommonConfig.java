@@ -81,6 +81,7 @@ public class CommonConfig {
 	@Bean
 	public CommonsMultipartResolver multipartResolver(){
 		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
+		// TODO::재설정 필요 (jb.choi)
 		// 업로드 가능한 파일 크기 (크기 설정 필요 현재 약 100MB)
 		multipartResolver.setMaxUploadSize(100000000);
 		// 메모리에 최대로 저장할 수 있는 공간 크기 (크기 설정 필요 현재 약 100MB)
