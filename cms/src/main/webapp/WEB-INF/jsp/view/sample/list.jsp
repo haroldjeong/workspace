@@ -135,9 +135,9 @@
 										<td><c:out value="${result.name}"/></td>
 										<td class="text-center"><javatime:format value="${result.testDate}" style="M-" /></td>
 										<td class="text-center"><javatime:format value="${result.regDate}" style="MS" /></td>
-										<td><c:out value="${result.regId}"/></td>
+										<td class="text-center"><c:out value="${user:getCachedUser(userSet, result.regId).getName()}"/></td>
 										<td class="text-center"><javatime:format value="${result.modDate}" style="MS" /></td>
-										<td><c:out value="${result.modId}"/></td>
+										<td class="text-center"><c:out value="${user:getCachedUser(userSet, result.modId).getName()}"/></td>
 										<td class="text-center">
 											<button type="button" class="_flow-action-detail btn btn-white btn-sm" data-id="${result.id}" title="<spring:message code="button.view" text="보기"/>"><i class="fa fa-search"></i> </button>
 											<button type="button" class="_flow-action-form btn btn-white btn-sm" data-id="${result.id}" title="<spring:message code="button.modified" text="수정"/>"><i class="fa fa-wrench"></i></button>

@@ -1,5 +1,6 @@
 package go.gg.cms.core.interceptor;
 
+import go.gg.cms.apps.user.service.UserService;
 import go.gg.cms.core.domain.Menu;
 import go.gg.cms.core.service.CodeService;
 import go.gg.cms.core.service.MenuService;
@@ -36,6 +37,9 @@ public class CmsInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	private MenuService menuService;
 
+	@Autowired
+	private UserService userService;
+
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -45,6 +49,7 @@ public class CmsInterceptor extends HandlerInterceptorAdapter {
 		System.out.println(request.getRequestURI());
 		request.setAttribute("newLineChar", "\n");
 		request.setAttribute("codeSet", codeService.findCodeCache());
+		request.setAttribute("userSet", userService.findUserCache());
 
 		List<Menu> menuSet =  menuService.findMenuCache(UserUtils.getUserInfo().getId());
 		Menu currMenu = menuService.findCurentMenu(menuSet, request.getRequestURI());

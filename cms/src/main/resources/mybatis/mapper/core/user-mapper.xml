@@ -44,6 +44,27 @@
 		</if>
 	</sql>
 
+	<!-- 관리자 목록 조회 (캐싱데이터: 이름을 제외한 개인정보 조회 금지) -->
+	<select id="findCache" parameterType="CmsUser" resultType="CmsUser">
+		/* SQL_ID : go.gg.cms.apps.user.findCache */
+		<![CDATA[
+		SELECT
+			u_id.id AS id
+			, u_id.login_id AS login_id
+			, u_id.user_type AS user_type
+			, fn_dec(u_id.name) AS name
+			, u_group.id AS group_id
+			, u_group.group_name AS group_name
+		FROM
+			tb_user as u_id
+		LEFT OUTER JOIN tb_user_group as u_group
+		ON u_id.group_id = u_group.id
+		]]>
+		<where>
+			u_id.status <![CDATA[<>]]> 'REMOVED'
+		</where>
+	</select>
+
 	<!-- 관리자 목록 조회 -->
 	<select id="findList" parameterType="CmsUser" resultType="CmsUser">
 		/* SQL_ID : go.gg.cms.apps.user.findList */

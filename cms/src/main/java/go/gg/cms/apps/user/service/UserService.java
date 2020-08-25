@@ -1,7 +1,10 @@
 package go.gg.cms.apps.user.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import go.gg.cms.core.service.BaseService;
 import go.gg.cms.core.domain.User;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +21,26 @@ import java.util.List;
 public class UserService extends BaseService<User, String> {
 
 	private final String QUERY_ID_PREFIX = "user";
+
+	/**
+	 * 전체 사용자 목록 (개인정보 제외)
+	 * @see String 캐싱되는 데이터이므로 개인정보 포함 금지
+	 * @return 2차원 배열 JSON String
+	 */
+	@Cacheable(cacheNames="userCache", key="#root.methodName")
+	public String findUserCache() {
+		List<User> codeList = super.find(QUERY_ID_PREFIX, "Cache", new User());
+		String result = "";
+
+		try {
+			result = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(codeList);
+		} catch (JsonProcessingException e) {
+			logger.error("{}", e);
+		}
+
+		logger.debug(result);
+		return result;
+	}
 
 	public List<User> find(User condition) {
 		return super.find(QUERY_ID_PREFIX, "List", condition);

@@ -72,7 +72,7 @@
 						<div class="form-group row">
 							<label class="col-sm-3 col-form-label"><spring:message code="role.list.regId" text="등록자"/></label>
 							<div class="col-sm-9">
-								<p class="form-control-static"><c:out value="${result.regId}"/></p>
+								<p class="form-control-static"><c:out value="${user:getCachedUser(userSet, result.regId).getName()}"/></p>
 							</div>
 						</div>
 						<c:if test="${not empty result.modId}" >
@@ -87,7 +87,7 @@
 							<div class="form-group row">
 								<label class="col-sm-3 col-form-label"><spring:message code="role.list.modId" text="수정자"/></label>
 								<div class="col-sm-9">
-									<p class="form-control-static"><c:out value="${result.modId}"/></p>
+									<p class="form-control-static"><c:out value="${user:getCachedUser(userSet, result.modId).getName()}"/></p>
 								</div>
 							</div>
 						</c:if>

@@ -11,6 +11,16 @@
 	<uri>tld/user.tld</uri>
 
 	<function>
+		<description>Fetch Cached User Information</description>
+		<name>getCachedUser</name>
+		<function-class>go.gg.cms.core.util.UserUtils</function-class>
+		<function-signature>java.lang.String getCachedUser(java.lang.String, java.lang.String)</function-signature>
+		<example>
+			${user:getCachedUser(userSet, 'user-key')}
+		</example>
+	</function>
+
+	<function>
 		<description>Fetch Login User Information</description>
 		<name>getUserInfo</name>
 		<function-class>go.gg.cms.core.util.UserUtils</function-class>

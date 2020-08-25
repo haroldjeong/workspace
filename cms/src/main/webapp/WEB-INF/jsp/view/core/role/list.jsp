@@ -22,8 +22,8 @@
 							<div class="form-group col-lg-3">
 								<label for="searchCondition"><strong><spring:message code="search.condition" text="검색구분" /></strong></label>
 								<select class="form-control" name="searchCondition" id="searchCondition">
-									<option value="role_cd" <c:if test="${condition.searchCondition eq 'role_cd'}"> selected="selected"</c:if> ><spring:message code="role.list.roleCd" text="Role 코드"/></option>
-									<option value="name" <c:if test="${condition.searchCondition eq 'name'}"> selected="selected"</c:if> ><spring:message code="role.list.name" text="Role 이름"/></option>
+									<option value="role_cd" <c:if test="${condition.searchCondition eq 'role_cd'}"> selected="selected"</c:if> ><spring:message code="role.list.roleCd" text="권한 코드"/></option>
+									<option value="name" <c:if test="${condition.searchCondition eq 'name'}"> selected="selected"</c:if> ><spring:message code="role.list.name" text="권한 이름"/></option>
 								</select>
 							</div>
 							<div class="form-group col-lg-6">
@@ -99,8 +99,8 @@
 								<thead>
 									<tr>
 										<th class="text-center">No.</th>
-										<th><spring:message code="role.list.roleCd" text="Role 코드"/></th>
-										<th><spring:message code="role.list.name" text="Role 이름"/></th>
+										<th><spring:message code="role.list.roleCd" text="권한 코드"/></th>
+										<th><spring:message code="role.list.name" text="권한 이름"/></th>
 										<th class="text-center"><spring:message code="role.list.regDate" text="등록 일시"/></th>
 										<th class="text-center"><spring:message code="role.list.regId" text="등록자"/></th>
 										<th class="text-center"><spring:message code="role.list.modDate" text="수정 일시"/></th>
@@ -123,9 +123,9 @@
 										<td><c:out value="${result.roleCd}"/></td>
 										<td><c:out value="${result.name}"/></td>
 										<td class="text-center"><javatime:format value="${result.regDate}" style="MS" /></td>
-										<td><c:out value="${result.regId}"/></td>
+										<td class="text-center"><c:out value="${user:getCachedUser(userSet, result.regId).getName()}"/></td>
 										<td class="text-center"><javatime:format value="${result.modDate}" style="MS" /></td>
-										<td><c:out value="${result.modId}"/></td>
+										<td class="text-center"><c:out value="${user:getCachedUser(userSet, result.modId).getName()}"/></td>
 										<td class="text-center">
 											<button type="button" class="_flow-action-detail btn btn-white btn-sm" data-id="${result.id}" title="<spring:message code="button.view" text="보기"/>"><i class="fa fa-search"></i> </button>
 											<button type="button" class="_flow-action-form btn btn-white btn-sm" data-id="${result.id}" title="<spring:message code="button.modified" text="수정"/>"><i class="fa fa-wrench"></i></button>

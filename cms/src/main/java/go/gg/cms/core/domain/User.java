@@ -220,4 +220,29 @@ public class User extends Database {
 	public void setSearchChannel(String searchChannel) {
 		this.searchChannel = searchChannel;
 	}
+
+	public User() {}
+
+	public User(String id, String loginId, String name) {
+		super.setId(id);
+		this.loginId = loginId;
+		this.name = name;
+	}
+
+	public User(String id, String loginId, String name, String userType, String groupId, String groupName) {
+		super.setId(id);
+		this.loginId = loginId;
+		this.name = name;
+		this.userType = userType;
+		this.groupId = groupId;
+		this.groupName = groupName;
+	}
+
+	public static User create(String id, String loginId, String name) {
+		return new User(id, loginId, name);
+	}
+
+	public static User create(String id, String loginId, String name, String userType, String groupId, String groupName) {
+		return new User(id, loginId, name, userType, groupId, groupName);
+	}
 }

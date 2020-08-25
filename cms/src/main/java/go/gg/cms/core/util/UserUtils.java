@@ -1,5 +1,8 @@
 package go.gg.cms.core.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import go.gg.cms.core.domain.SecurityUserDetail;
 import go.gg.cms.core.domain.User;
 import go.gg.common.util.DeepfineUtils;
@@ -17,6 +20,32 @@ import org.springframework.security.core.context.SecurityContextHolder;
  */
 public class UserUtils {
 	private final static Logger logger = LoggerFactory.getLogger(UserUtils.class);
+
+	/**
+	 * 캐싱된 관리자 정보 조회
+	 * @return 관리자 정보 (User Class)
+	 */
+	public static User getCachedUser (String userSet, String key) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+
+		JsonNode jsonNode = mapper.readTree(userSet);
+		User findUser = new User();
+
+		for (JsonNode user : jsonNode) {
+			if (key.equals(user.get("id").asText())) {
+				findUser = User.create(
+						user.get("id").asText()
+						, user.get("loginId").asText()
+						, user.get("name").asText()
+						, user.get("userType").asText()
+						, user.get("groupId").asText()
+						, user.get("groupName").asText());
+				break;
+			}
+		}
+
+		return findUser;
+	}
 
 	/**
 	 * 로그인 관리자 정보 조회
