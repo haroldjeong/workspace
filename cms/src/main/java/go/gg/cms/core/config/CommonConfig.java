@@ -26,10 +26,12 @@ import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 @ComponentScan(
 		basePackages="go.gg.cms",
 		includeFilters={
-				@ComponentScan.Filter(type=FilterType.ANNOTATION, value=Service.class)
-				, @ComponentScan.Filter(type=FilterType.ANNOTATION, value=Repository.class)
-				, @ComponentScan.Filter(type=FilterType.ANNOTATION, value=Controller.class)
+				@ComponentScan.Filter(type=FilterType.ANNOTATION, value=Repository.class)
+				, @ComponentScan.Filter(type=FilterType.ANNOTATION, value=Service.class)
 				, @ComponentScan.Filter(type=FilterType.ANNOTATION, value=Configuration.class)
+		},
+		excludeFilters={
+				@ComponentScan.Filter(type=FilterType.ANNOTATION, value=Controller.class)
 		}
 )
 @Import({AspectConfig.class, DataSourceConfig.class, PropertiesConfig.class, TransactionConfig.class, CacheConfig.class})

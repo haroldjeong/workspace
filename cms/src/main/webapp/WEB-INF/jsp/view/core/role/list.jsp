@@ -139,7 +139,7 @@
 					<div class="row" style="margin-top:5px;">
 						<div class="col-lg-4">
 							<div class="btn-group">
-								<button type="button" class="btn btn-white btn-sm _flow-action-form" title="<spring:message code="button.create" text="등록"/>"><i class="fa fa-pencil-square"></i><spring:message code="button.create" text="등록"/></button>
+								<button type="button" class="btn btn-white btn-sm _flow-action-form" title="<spring:message code="button.create" text="등록"/>"><i class="fa fa-pencil-square"></i>&nbsp;<spring:message code="button.create" text="등록"/></button>
 							</div>
 						</div>
 						<div class="col-lg-8">

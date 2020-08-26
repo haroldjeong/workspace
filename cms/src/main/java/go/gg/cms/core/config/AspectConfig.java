@@ -22,7 +22,7 @@ import org.springframework.util.AntPathMatcher;
  * @version 1.0.0
  */
 @Configuration
-@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy(proxyTargetClass=true)
 public class AspectConfig {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger("configuration");
@@ -48,7 +48,7 @@ public class AspectConfig {
 		LOGGER.debug("AspectConfig ::: DefaultExceptionHandleManager > defaultExceptionHandleManager");
 		DefaultExceptionHandleManager defaultExceptionHandleManager = new DefaultExceptionHandleManager();
 		defaultExceptionHandleManager.setReqExpMatcher(antPathMater);
-		defaultExceptionHandleManager.setPatterns(new String[]{"**service.impl.*"});
+		defaultExceptionHandleManager.setPatterns(new String[]{"**controller.*"});
 		defaultExceptionHandleManager.setHandlers(new ExceptionHandler[]{defaultHandler});
 		return defaultExceptionHandleManager;
 	}
@@ -58,7 +58,7 @@ public class AspectConfig {
 		LOGGER.debug("AspectConfig ::: DefaultExceptionHandleManager > otherExceptionHandleManager");
 		DefaultExceptionHandleManager otherExceptionHandleManager = new DefaultExceptionHandleManager();
 		otherExceptionHandleManager.setReqExpMatcher(antPathMater);
-		otherExceptionHandleManager.setPatterns(new String[]{"**service.impl.*"});
+		otherExceptionHandleManager.setPatterns(new String[]{"**controller.*"});
 		otherExceptionHandleManager.setHandlers(new ExceptionHandler[]{otherHandler});
 		return otherExceptionHandleManager;
 
@@ -66,13 +66,11 @@ public class AspectConfig {
 
 	@Bean
 	public DefaultExceptionHandler defaultHandler(){
-		DefaultExceptionHandler defaultExceptionHandler = new DefaultExceptionHandler();
-		return defaultExceptionHandler;
+		return new DefaultExceptionHandler();
 	}
 
 	@Bean
 	public OthersExceptionHandler otherHandler(){
-		OthersExceptionHandler othersExceptionHandler = new OthersExceptionHandler();
-		return othersExceptionHandler;
+		return new OthersExceptionHandler();
 	}
 }

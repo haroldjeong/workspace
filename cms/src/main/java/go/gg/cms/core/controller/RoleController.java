@@ -2,6 +2,8 @@ package go.gg.cms.core.controller;
 
 import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 
+import go.gg.cms.core.annotation.Permission;
+import go.gg.cms.core.annotation.type.PERMISSION;
 import go.gg.cms.core.domain.Menu;
 import go.gg.cms.core.domain.Role;
 import go.gg.cms.core.service.RoleService;
@@ -70,6 +72,7 @@ public class RoleController extends BaseController {
 	 * @return View Page (JSP)
 	 */
 	@RequestMapping("form.do")
+	@Permission(value={PERMISSION.WRITE})
 	public String form(@ModelAttribute("condition") Role condition, Model model) throws Exception {
 
 		Role result = new Role();
@@ -90,6 +93,7 @@ public class RoleController extends BaseController {
 	 */
 	@ResponseBody
 	@RequestMapping("save.do")
+	@Permission(value={PERMISSION.WRITE})
 	public Role save(@RequestBody Role condition) {
 
 		if (DeepfineUtils.isEmpty(condition.getId())) {

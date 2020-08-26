@@ -5,10 +5,7 @@ import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationRenderer;
 import go.gg.cms.core.controller.BaseController;
 import go.gg.cms.core.interceptor.CmsInterceptor;
 import go.gg.cms.core.util.CmsPaginationRenderer;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -55,6 +52,7 @@ import java.util.*;
 				, @ComponentScan.Filter(type=FilterType.ANNOTATION, value=Configuration.class)
 		}
 )
+@Import({AspectConfig.class})
 public class ServletConfig extends WebMvcConfigurationSupport {
 
 	/** Request Mapping Handler (URL - Controller 연결) */
@@ -118,12 +116,12 @@ public class ServletConfig extends WebMvcConfigurationSupport {
 	protected void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
 		// TODO Auto-generated method stub
 		SimpleMappingExceptionResolver smer = new SimpleMappingExceptionResolver();
-		smer.setDefaultErrorView("cmmn/egovError");
+		smer.setDefaultErrorView("core/error/500");
 		Properties mappings = new Properties();
-		mappings.setProperty("org.springframework.dao.DataAccessException", "cmmn/dataAccessFailure");
-		mappings.setProperty("org.springframework.transaction.TransactionException", "cmmn/transactionFailure");
-		mappings.setProperty("egovframework.rte.fdl.cmmn.exception.EgovBizException", "cmmn/egovError");
-		mappings.setProperty("org.springframework.security.AccessDeniedException", "cmmn/egovError");
+//		mappings.setProperty("org.springframework.dao.DataAccessException", "cmmn/dataAccessFailure");
+//		mappings.setProperty("org.springframework.transaction.TransactionException", "cmmn/transactionFailure");
+//		mappings.setProperty("egovframework.rte.fdl.cmmn.exception.EgovBizException", "cmmn/egovError");
+//		mappings.setProperty("org.springframework.security.AccessDeniedException", "cmmn/egovError");
 		smer.setExceptionMappings(mappings);
 		exceptionResolvers.add(smer);
 	}

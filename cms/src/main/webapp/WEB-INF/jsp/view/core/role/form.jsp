@@ -52,7 +52,7 @@
 						<label class="col-sm-3 col-form-label"><spring:message code="role.list.useYn" text="사용 여부"/></label>
 						<div class="col-sm-9">
 							<label class="radio-inline i-checks">
-								<input type="radio" name="useYn" value="Y" <c:if test="${result.useYn ne 'N'}">checked="checked"</c:if> >&nbsp;&nbsp;<spring:message code="common.useY" text="사용"/>&nbsp;&nbsp;
+								<input type="radio" name="useYn" value="Y" <c:if test="${empty result.useYn or result.useYn ne 'N'}">checked="checked"</c:if> >&nbsp;&nbsp;<spring:message code="common.useY" text="사용"/>&nbsp;&nbsp;
 							</label>
 							<label class="i-checks">
 								<input type="radio" name="useYn" value="N" <c:if test="${result.useYn eq 'N'}">checked="checked"</c:if> >&nbsp;&nbsp;<spring:message code="common.useN" text="미사용"/>&nbsp;&nbsp;
@@ -118,7 +118,7 @@
 						</tr>
 						<tr>
 							<th><spring:message code="role.form.role" text="권한" arguments=""/></th>
-							<td>
+							<td class="_flow-role-permission">
 								<label class="checkbox-inline i-checks">
 									<input type="checkbox" name="readYn" id="readYn" value="Y">&nbsp;&nbsp;<spring:message code="role.form.role" text="권한" arguments="읽기"/>&nbsp;&nbsp;
 								</label>
@@ -223,20 +223,20 @@
 					$("#menuCd").text(node.id);
 					$("#menuNm").text(node.data.menuNm);
 
-					$(".i-checks").each(function(index, item){
+					$('._flow-role-permission').find('.i-checks').each(function(index, item){
 						$(item).iCheck("uncheck");
 					});
 
-					if(node.data.readYn == "Y"){
+					if(node.data.readYn === "Y"){
 						$("#readYn").iCheck("check");
 					}
-					if(node.data.writeYn == "Y"){
+					if(node.data.writeYn === "Y"){
 						$("#writeYn").iCheck("check");
 					}
-					if(node.data.downYn == "Y"){
+					if(node.data.downYn === "Y"){
 						$("#downYn").iCheck("check");
 					}
-					if(node.data.deleteYn == "Y"){
+					if(node.data.deleteYn === "Y"){
 						$("#deleteYn").iCheck("check");
 					}
 
